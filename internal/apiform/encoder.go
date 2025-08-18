@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/packages/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

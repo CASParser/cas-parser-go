@@ -2,7 +2,7 @@ package param_test
 
 import (
 	"encoding/json"
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/packages/param"
 	"testing"
 )
 
