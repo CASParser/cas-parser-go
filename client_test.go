@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/cas-parser-go"
-	"github.com/stainless-sdks/cas-parser-go/internal"
-	"github.com/stainless-sdks/cas-parser-go/option"
+	"github.com/CASParser/cas-parser-go"
+	"github.com/CASParser/cas-parser-go/internal"
+	"github.com/CASParser/cas-parser-go/option"
 )
 
 type closureTransport struct {

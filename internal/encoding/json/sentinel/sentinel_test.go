@@ -1,8 +1,8 @@
 package sentinel_test
 
 import (
-	"github.com/stainless-sdks/cas-parser-go/internal/encoding/json/sentinel"
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/internal/encoding/json/sentinel"
+	"github.com/CASParser/cas-parser-go/packages/param"
 	"reflect"
 	"slices"
 	"testing"

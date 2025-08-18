@@ -1,7 +1,7 @@
 package apiform
 
 import (
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/packages/param"
 	"mime/multipart"
 	"reflect"
 )

@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/cas-parser-go"
-	"github.com/stainless-sdks/cas-parser-go/internal/testutil"
-	"github.com/stainless-sdks/cas-parser-go/option"
+	"github.com/CASParser/cas-parser-go"
+	"github.com/CASParser/cas-parser-go/internal/testutil"
+	"github.com/CASParser/cas-parser-go/option"
 )
 
 func TestUsage(t *testing.T) {
