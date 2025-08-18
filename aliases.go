@@ -3,8 +3,8 @@
 package casparser
 
 import (
-	"github.com/stainless-sdks/cas-parser-go/internal/apierror"
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/internal/apierror"
+	"github.com/CASParser/cas-parser-go/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding
