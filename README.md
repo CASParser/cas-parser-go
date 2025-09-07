@@ -1,6 +1,10 @@
 # Cas Parser Go API Library
 
+<!-- x-release-please-start-version -->
+
 <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go"><img src="https://pkg.go.dev/badge/github.com/CASParser/cas-parser-go.svg" alt="Go Reference"></a>
+
+<!-- x-release-please-end -->
 
 The Cas Parser Go library provides convenient access to the [Cas Parser REST API](https://docs.casparser.in/reference)
 from applications written in Go.
@@ -24,7 +28,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/CASParser/cas-parser-go@v0.0.2'
+go get -u 'github.com/CASParser/cas-parser-go@v0.0.3'
 ```
 
 <!-- x-release-please-end -->
