@@ -5,6 +5,7 @@ package casparser
 import (
 	"context"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/CASParser/cas-parser-go/internal/apijson"
@@ -37,7 +38,7 @@ func NewCasParserService(opts ...option.RequestOption) (r CasParserService) {
 // Statement) PDF files and returns data in a unified format. Use this endpoint
 // when you know the PDF is from CAMS or KFintech.
 func (r *CasParserService) CamsKfintech(ctx context.Context, body CasParserCamsKfintechParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v4/cams_kfintech/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -47,7 +48,7 @@ func (r *CasParserService) CamsKfintech(ctx context.Context, body CasParserCamsK
 // files and returns data in a unified format. Use this endpoint when you know the
 // PDF is from CDSL.
 func (r *CasParserService) Cdsl(ctx context.Context, body CasParserCdslParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v4/cdsl/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -57,7 +58,7 @@ func (r *CasParserService) Cdsl(ctx context.Context, body CasParserCdslParams, o
 // files and returns data in a unified format. Use this endpoint when you know the
 // PDF is from NSDL.
 func (r *CasParserService) Nsdl(ctx context.Context, body CasParserNsdlParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v4/nsdl/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -68,7 +69,7 @@ func (r *CasParserService) Nsdl(ctx context.Context, body CasParserNsdlParams, o
 // CAS type and transforms the data into a consistent structure regardless of the
 // source.
 func (r *CasParserService) SmartParse(ctx context.Context, body CasParserSmartParseParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v4/smart/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return

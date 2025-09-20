@@ -5,6 +5,7 @@ package casparser
 import (
 	"context"
 	"net/http"
+	"slices"
 
 	"github.com/CASParser/cas-parser-go/internal/apijson"
 	"github.com/CASParser/cas-parser-go/internal/requestconfig"
@@ -36,7 +37,7 @@ func NewCasGeneratorService(opts ...option.RequestOption) (r CasGeneratorService
 // submitting a mailback request to the specified CAS authority. Currently only
 // supports KFintech, with plans to support CAMS, CDSL, and NSDL in the future.
 func (r *CasGeneratorService) GenerateCas(ctx context.Context, body CasGeneratorGenerateCasParams, opts ...option.RequestOption) (res *CasGeneratorGenerateCasResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v4/generate"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
