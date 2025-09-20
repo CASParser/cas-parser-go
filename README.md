@@ -35,7 +35,7 @@ go get -u 'github.com/CASParser/cas-parser-go@v0.0.3'
 
 ## Requirements
 
-This library requires Go 1.18+.
+This library requires Go 1.22+.
 
 ## Usage
 
