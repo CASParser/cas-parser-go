@@ -81,7 +81,9 @@ type UnifiedResponse struct {
 	Investor      UnifiedResponseInvestor       `json:"investor"`
 	Meta          UnifiedResponseMeta           `json:"meta"`
 	MutualFunds   []UnifiedResponseMutualFund   `json:"mutual_funds"`
-	Summary       UnifiedResponseSummary        `json:"summary"`
+	// List of NPS accounts
+	Nps     []UnifiedResponseNp    `json:"nps"`
+	Summary UnifiedResponseSummary `json:"summary"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		DematAccounts respjson.Field
@@ -89,6 +91,7 @@ type UnifiedResponse struct {
 		Investor      respjson.Field
 		Meta          respjson.Field
 		MutualFunds   respjson.Field
+		Nps           respjson.Field
 		Summary       respjson.Field
 		ExtraFields   map[string]respjson.Field
 		raw           string
@@ -117,6 +120,8 @@ type UnifiedResponseDematAccount struct {
 	// Depository Participant name
 	DpName   string                              `json:"dp_name"`
 	Holdings UnifiedResponseDematAccountHoldings `json:"holdings"`
+	// List of account holders linked to this demat account
+	LinkedHolders []UnifiedResponseDematAccountLinkedHolder `json:"linked_holders"`
 	// Total value of the demat account
 	Value float64 `json:"value"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -128,6 +133,7 @@ type UnifiedResponseDematAccount struct {
 		DpID           respjson.Field
 		DpName         respjson.Field
 		Holdings       respjson.Field
+		LinkedHolders  respjson.Field
 		Value          respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -348,6 +354,26 @@ func (r *UnifiedResponseDematAccountHoldingsGovernmentSecurity) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type UnifiedResponseDematAccountLinkedHolder struct {
+	// Name of the account holder
+	Name string `json:"name"`
+	// PAN of the account holder
+	Pan string `json:"pan"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Pan         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseDematAccountLinkedHolder) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseDematAccountLinkedHolder) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type UnifiedResponseInsurance struct {
 	LifeInsurancePolicies []UnifiedResponseInsuranceLifeInsurancePolicy `json:"life_insurance_policies"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -491,6 +517,8 @@ type UnifiedResponseMutualFund struct {
 	Amc string `json:"amc"`
 	// Folio number
 	FolioNumber string `json:"folio_number"`
+	// List of account holders linked to this mutual fund folio
+	LinkedHolders []UnifiedResponseMutualFundLinkedHolder `json:"linked_holders"`
 	// Registrar and Transfer Agent name
 	Registrar string                            `json:"registrar"`
 	Schemes   []UnifiedResponseMutualFundScheme `json:"schemes"`
@@ -501,6 +529,7 @@ type UnifiedResponseMutualFund struct {
 		AdditionalInfo respjson.Field
 		Amc            respjson.Field
 		FolioNumber    respjson.Field
+		LinkedHolders  respjson.Field
 		Registrar      respjson.Field
 		Schemes        respjson.Field
 		Value          respjson.Field
@@ -536,6 +565,26 @@ type UnifiedResponseMutualFundAdditionalInfo struct {
 // Returns the unmodified JSON received from the API
 func (r UnifiedResponseMutualFundAdditionalInfo) RawJSON() string { return r.JSON.raw }
 func (r *UnifiedResponseMutualFundAdditionalInfo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UnifiedResponseMutualFundLinkedHolder struct {
+	// Name of the account holder
+	Name string `json:"name"`
+	// PAN of the account holder
+	Pan string `json:"pan"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Pan         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseMutualFundLinkedHolder) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseMutualFundLinkedHolder) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -677,6 +726,112 @@ func (r *UnifiedResponseMutualFundSchemeTransaction) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type UnifiedResponseNp struct {
+	// Additional information specific to the NPS account
+	AdditionalInfo any `json:"additional_info"`
+	// Central Record Keeping Agency name
+	Cra   string                  `json:"cra"`
+	Funds []UnifiedResponseNpFund `json:"funds"`
+	// List of account holders linked to this NPS account
+	LinkedHolders []UnifiedResponseNpLinkedHolder `json:"linked_holders"`
+	// Permanent Retirement Account Number (PRAN)
+	Pran string `json:"pran"`
+	// Total value of the NPS account
+	Value float64 `json:"value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AdditionalInfo respjson.Field
+		Cra            respjson.Field
+		Funds          respjson.Field
+		LinkedHolders  respjson.Field
+		Pran           respjson.Field
+		Value          respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseNp) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseNp) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UnifiedResponseNpFund struct {
+	// Additional information specific to the NPS fund
+	AdditionalInfo UnifiedResponseNpFundAdditionalInfo `json:"additional_info"`
+	// Cost of investment
+	Cost float64 `json:"cost"`
+	// Name of the NPS fund
+	Name string `json:"name"`
+	// Net Asset Value per unit
+	Nav float64 `json:"nav"`
+	// Number of units held
+	Units float64 `json:"units"`
+	// Current market value of the holding
+	Value float64 `json:"value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AdditionalInfo respjson.Field
+		Cost           respjson.Field
+		Name           respjson.Field
+		Nav            respjson.Field
+		Units          respjson.Field
+		Value          respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseNpFund) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseNpFund) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional information specific to the NPS fund
+type UnifiedResponseNpFundAdditionalInfo struct {
+	// Fund manager name
+	Manager string `json:"manager"`
+	// NPS tier (Tier I or Tier II)
+	//
+	// Any of 1, 2.
+	Tier float64 `json:"tier,nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Manager     respjson.Field
+		Tier        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseNpFundAdditionalInfo) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseNpFundAdditionalInfo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UnifiedResponseNpLinkedHolder struct {
+	// Name of the account holder
+	Name string `json:"name"`
+	// PAN of the account holder
+	Pan string `json:"pan"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Pan         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseNpLinkedHolder) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseNpLinkedHolder) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type UnifiedResponseSummary struct {
 	Accounts UnifiedResponseSummaryAccounts `json:"accounts"`
 	// Total portfolio value across all accounts
@@ -700,11 +855,13 @@ type UnifiedResponseSummaryAccounts struct {
 	Demat       UnifiedResponseSummaryAccountsDemat       `json:"demat"`
 	Insurance   UnifiedResponseSummaryAccountsInsurance   `json:"insurance"`
 	MutualFunds UnifiedResponseSummaryAccountsMutualFunds `json:"mutual_funds"`
+	Nps         UnifiedResponseSummaryAccountsNps         `json:"nps"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Demat       respjson.Field
 		Insurance   respjson.Field
 		MutualFunds respjson.Field
+		Nps         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -773,6 +930,26 @@ type UnifiedResponseSummaryAccountsMutualFunds struct {
 // Returns the unmodified JSON received from the API
 func (r UnifiedResponseSummaryAccountsMutualFunds) RawJSON() string { return r.JSON.raw }
 func (r *UnifiedResponseSummaryAccountsMutualFunds) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UnifiedResponseSummaryAccountsNps struct {
+	// Number of NPS accounts
+	Count int64 `json:"count"`
+	// Total value of NPS accounts
+	TotalValue float64 `json:"total_value"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Count       respjson.Field
+		TotalValue  respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UnifiedResponseSummaryAccountsNps) RawJSON() string { return r.JSON.raw }
+func (r *UnifiedResponseSummaryAccountsNps) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
