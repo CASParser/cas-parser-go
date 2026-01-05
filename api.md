@@ -12,11 +12,3 @@ Methods:
 - <code title="post /v4/smart/parse">client.CasParser.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasParserService.SmartParse">SmartParse</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasParserSmartParseParams">CasParserSmartParseParams</a>) (<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#UnifiedResponse">UnifiedResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # CasGenerator
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasGeneratorGenerateCasResponse">CasGeneratorGenerateCasResponse</a>
-
-Methods:
-
-- <code title="post /v4/generate">client.CasGenerator.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasGeneratorService.GenerateCas">GenerateCas</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasGeneratorGenerateCasParams">CasGeneratorGenerateCasParams</a>) (<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CasGeneratorGenerateCasResponse">CasGeneratorGenerateCasResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
