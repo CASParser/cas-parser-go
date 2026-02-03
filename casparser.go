@@ -1579,9 +1579,9 @@ func (r *UnifiedResponseSummaryAccountsNps) UnmarshalJSON(data []byte) error {
 type CasParserCamsKfintechParams struct {
 	// Password for the PDF file (if required)
 	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file
+	// Base64 encoded CAS PDF file (required if pdf_url not provided)
 	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file
+	// URL to the CAS PDF file (required if pdf_file not provided)
 	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
 	paramObj
 }
@@ -1597,9 +1597,9 @@ func (r *CasParserCamsKfintechParams) UnmarshalJSON(data []byte) error {
 type CasParserCdslParams struct {
 	// Password for the PDF file (if required)
 	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file
+	// Base64 encoded CAS PDF file (required if pdf_url not provided)
 	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file
+	// URL to the CAS PDF file (required if pdf_file not provided)
 	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
 	paramObj
 }
@@ -1615,9 +1615,9 @@ func (r *CasParserCdslParams) UnmarshalJSON(data []byte) error {
 type CasParserNsdlParams struct {
 	// Password for the PDF file (if required)
 	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file
+	// Base64 encoded CAS PDF file (required if pdf_url not provided)
 	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file
+	// URL to the CAS PDF file (required if pdf_file not provided)
 	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
 	paramObj
 }
@@ -1633,9 +1633,9 @@ func (r *CasParserNsdlParams) UnmarshalJSON(data []byte) error {
 type CasParserSmartParseParams struct {
 	// Password for the PDF file (if required)
 	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file
+	// Base64 encoded CAS PDF file (required if pdf_url not provided)
 	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file
+	// URL to the CAS PDF file (required if pdf_file not provided)
 	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
 	paramObj
 }
