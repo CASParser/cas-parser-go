@@ -8,8 +8,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/stainless-sdks/cas-parser-go/internal/requestconfig"
-	"github.com/stainless-sdks/cas-parser-go/option"
+	"github.com/CASParser/cas-parser-go/internal/requestconfig"
+	"github.com/CASParser/cas-parser-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

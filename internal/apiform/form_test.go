@@ -2,7 +2,7 @@ package apiform
 
 import (
 	"bytes"
-	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/CASParser/cas-parser-go/packages/param"
 	"io"
 	"mime/multipart"
 	"strings"
