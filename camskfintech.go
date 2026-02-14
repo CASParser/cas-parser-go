@@ -15,21 +15,21 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
-// CasParserService contains methods and other services that help with interacting
-// with the CAS Parser API.
+// CamsKfintechService contains methods and other services that help with
+// interacting with the cas-parser API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewCasParserService] method instead.
-type CasParserService struct {
+// the [NewCamsKfintechService] method instead.
+type CamsKfintechService struct {
 	Options []option.RequestOption
 }
 
-// NewCasParserService generates a new service that applies the given options to
+// NewCamsKfintechService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewCasParserService(opts ...option.RequestOption) (r CasParserService) {
-	r = CasParserService{}
+func NewCamsKfintechService(opts ...option.RequestOption) (r CamsKfintechService) {
+	r = CamsKfintechService{}
 	r.Options = opts
 	return
 }
@@ -37,43 +37,144 @@ func NewCasParserService(opts ...option.RequestOption) (r CasParserService) {
 // This endpoint specifically parses CAMS/KFintech CAS (Consolidated Account
 // Statement) PDF files and returns data in a unified format. Use this endpoint
 // when you know the PDF is from CAMS or KFintech.
-func (r *CasParserService) CamsKfintech(ctx context.Context, body CasParserCamsKfintechParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
+func (r *CamsKfintechService) Parse(ctx context.Context, body CamsKfintechParseParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/cams_kfintech/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-// This endpoint specifically parses CDSL CAS (Consolidated Account Statement) PDF
-// files and returns data in a unified format. Use this endpoint when you know the
-// PDF is from CDSL.
-func (r *CasParserService) Cdsl(ctx context.Context, body CasParserCdslParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	path := "v4/cdsl/parse"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+type LinkedHolder struct {
+	// Name of the account holder
+	Name string `json:"name"`
+	// PAN of the account holder
+	Pan string `json:"pan"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Pan         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
 }
 
-// This endpoint specifically parses NSDL CAS (Consolidated Account Statement) PDF
-// files and returns data in a unified format. Use this endpoint when you know the
-// PDF is from NSDL.
-func (r *CasParserService) Nsdl(ctx context.Context, body CasParserNsdlParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	path := "v4/nsdl/parse"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+// Returns the unmodified JSON received from the API
+func (r LinkedHolder) RawJSON() string { return r.JSON.raw }
+func (r *LinkedHolder) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-// This endpoint parses CAS (Consolidated Account Statement) PDF files from NSDL,
-// CDSL, or CAMS/KFintech and returns data in a unified format. It auto-detects the
-// CAS type and transforms the data into a consistent structure regardless of the
-// source.
-func (r *CasParserService) SmartParse(ctx context.Context, body CasParserSmartParseParams, opts ...option.RequestOption) (res *UnifiedResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	path := "v4/smart/parse"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+// Unified transaction schema for all holding types (MF folios, equities, bonds,
+// etc.)
+type Transaction struct {
+	// Additional transaction-specific fields that vary by source
+	AdditionalInfo TransactionAdditionalInfo `json:"additional_info"`
+	// Transaction amount in currency (computed from units × price/NAV)
+	Amount float64 `json:"amount,nullable"`
+	// Balance units after transaction
+	Balance float64 `json:"balance"`
+	// Transaction date (YYYY-MM-DD)
+	Date time.Time `json:"date" format:"date"`
+	// Transaction description/particulars
+	Description string `json:"description"`
+	// Dividend rate (for DIVIDEND_PAYOUT transactions)
+	DividendRate float64 `json:"dividend_rate,nullable"`
+	// NAV/price per unit on transaction date
+	Nav float64 `json:"nav,nullable"`
+	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
+	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
+	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
+	// REVERSAL, UNKNOWN.
+	//
+	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
+	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
+	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
+	// "MISC", "REVERSAL", "UNKNOWN".
+	Type TransactionType `json:"type"`
+	// Number of units involved in transaction
+	Units float64 `json:"units"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AdditionalInfo respjson.Field
+		Amount         respjson.Field
+		Balance        respjson.Field
+		Date           respjson.Field
+		Description    respjson.Field
+		DividendRate   respjson.Field
+		Nav            respjson.Field
+		Type           respjson.Field
+		Units          respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
 }
+
+// Returns the unmodified JSON received from the API
+func (r Transaction) RawJSON() string { return r.JSON.raw }
+func (r *Transaction) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional transaction-specific fields that vary by source
+type TransactionAdditionalInfo struct {
+	// Capital withdrawal amount (CDSL MF transactions)
+	CapitalWithdrawal float64 `json:"capital_withdrawal"`
+	// Units credited (demat transactions)
+	Credit float64 `json:"credit"`
+	// Units debited (demat transactions)
+	Debit float64 `json:"debit"`
+	// Income distribution amount (CDSL MF transactions)
+	IncomeDistribution float64 `json:"income_distribution"`
+	// Order/transaction reference number (demat transactions)
+	OrderNo string `json:"order_no"`
+	// Price per unit (NSDL/CDSL MF transactions)
+	Price float64 `json:"price"`
+	// Stamp duty charged
+	StampDuty float64 `json:"stamp_duty"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CapitalWithdrawal  respjson.Field
+		Credit             respjson.Field
+		Debit              respjson.Field
+		IncomeDistribution respjson.Field
+		OrderNo            respjson.Field
+		Price              respjson.Field
+		StampDuty          respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r TransactionAdditionalInfo) RawJSON() string { return r.JSON.raw }
+func (r *TransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
+// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
+// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
+// REVERSAL, UNKNOWN.
+type TransactionType string
+
+const (
+	TransactionTypePurchase         TransactionType = "PURCHASE"
+	TransactionTypePurchaseSip      TransactionType = "PURCHASE_SIP"
+	TransactionTypeRedemption       TransactionType = "REDEMPTION"
+	TransactionTypeSwitchIn         TransactionType = "SWITCH_IN"
+	TransactionTypeSwitchInMerger   TransactionType = "SWITCH_IN_MERGER"
+	TransactionTypeSwitchOut        TransactionType = "SWITCH_OUT"
+	TransactionTypeSwitchOutMerger  TransactionType = "SWITCH_OUT_MERGER"
+	TransactionTypeDividendPayout   TransactionType = "DIVIDEND_PAYOUT"
+	TransactionTypeDividendReinvest TransactionType = "DIVIDEND_REINVEST"
+	TransactionTypeSegregation      TransactionType = "SEGREGATION"
+	TransactionTypeStampDutyTax     TransactionType = "STAMP_DUTY_TAX"
+	TransactionTypeTdsTax           TransactionType = "TDS_TAX"
+	TransactionTypeSttTax           TransactionType = "STT_TAX"
+	TransactionTypeMisc             TransactionType = "MISC"
+	TransactionTypeReversal         TransactionType = "REVERSAL"
+	TransactionTypeUnknown          TransactionType = "UNKNOWN"
+)
 
 type UnifiedResponse struct {
 	DematAccounts []UnifiedResponseDematAccount `json:"demat_accounts"`
@@ -121,7 +222,7 @@ type UnifiedResponseDematAccount struct {
 	DpName   string                              `json:"dp_name"`
 	Holdings UnifiedResponseDematAccountHoldings `json:"holdings"`
 	// List of account holders linked to this demat account
-	LinkedHolders []UnifiedResponseDematAccountLinkedHolder `json:"linked_holders"`
+	LinkedHolders []LinkedHolder `json:"linked_holders"`
 	// Total value of the demat account
 	Value float64 `json:"value"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -217,7 +318,7 @@ type UnifiedResponseDematAccountHoldingsAif struct {
 	// Name of the AIF
 	Name string `json:"name"`
 	// List of transactions for this holding (beta)
-	Transactions []UnifiedResponseDematAccountHoldingsAifTransaction `json:"transactions"`
+	Transactions []Transaction `json:"transactions"`
 	// Number of units held
 	Units float64 `json:"units"`
 	// Current market value of the holding
@@ -262,95 +363,6 @@ func (r *UnifiedResponseDematAccountHoldingsAifAdditionalInfo) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseDematAccountHoldingsAifTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseDematAccountHoldingsAifTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsAifTransaction) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseDematAccountHoldingsAifTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseDematAccountHoldingsAifTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsAifTransactionAdditionalInfo) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsAifTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseDematAccountHoldingsCorporateBond struct {
 	// Additional information specific to the corporate bond
 	AdditionalInfo UnifiedResponseDematAccountHoldingsCorporateBondAdditionalInfo `json:"additional_info"`
@@ -359,7 +371,7 @@ type UnifiedResponseDematAccountHoldingsCorporateBond struct {
 	// Name of the corporate bond
 	Name string `json:"name"`
 	// List of transactions for this holding (beta)
-	Transactions []UnifiedResponseDematAccountHoldingsCorporateBondTransaction `json:"transactions"`
+	Transactions []Transaction `json:"transactions"`
 	// Number of units held
 	Units float64 `json:"units"`
 	// Current market value of the holding
@@ -406,97 +418,6 @@ func (r *UnifiedResponseDematAccountHoldingsCorporateBondAdditionalInfo) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseDematAccountHoldingsCorporateBondTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseDematAccountHoldingsCorporateBondTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsCorporateBondTransaction) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsCorporateBondTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseDematAccountHoldingsCorporateBondTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsCorporateBondTransactionAdditionalInfo) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsCorporateBondTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseDematAccountHoldingsDematMutualFund struct {
 	// Additional information specific to the mutual fund
 	AdditionalInfo UnifiedResponseDematAccountHoldingsDematMutualFundAdditionalInfo `json:"additional_info"`
@@ -505,7 +426,7 @@ type UnifiedResponseDematAccountHoldingsDematMutualFund struct {
 	// Name of the mutual fund
 	Name string `json:"name"`
 	// List of transactions for this holding (beta)
-	Transactions []UnifiedResponseDematAccountHoldingsDematMutualFundTransaction `json:"transactions"`
+	Transactions []Transaction `json:"transactions"`
 	// Number of units held
 	Units float64 `json:"units"`
 	// Current market value of the holding
@@ -552,97 +473,6 @@ func (r *UnifiedResponseDematAccountHoldingsDematMutualFundAdditionalInfo) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseDematAccountHoldingsDematMutualFundTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseDematAccountHoldingsDematMutualFundTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsDematMutualFundTransaction) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsDematMutualFundTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseDematAccountHoldingsDematMutualFundTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsDematMutualFundTransactionAdditionalInfo) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsDematMutualFundTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseDematAccountHoldingsEquity struct {
 	// Additional information specific to the equity
 	AdditionalInfo UnifiedResponseDematAccountHoldingsEquityAdditionalInfo `json:"additional_info"`
@@ -651,7 +481,7 @@ type UnifiedResponseDematAccountHoldingsEquity struct {
 	// Name of the equity
 	Name string `json:"name"`
 	// List of transactions for this holding (beta)
-	Transactions []UnifiedResponseDematAccountHoldingsEquityTransaction `json:"transactions"`
+	Transactions []Transaction `json:"transactions"`
 	// Number of units held
 	Units float64 `json:"units"`
 	// Current market value of the holding
@@ -696,95 +526,6 @@ func (r *UnifiedResponseDematAccountHoldingsEquityAdditionalInfo) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseDematAccountHoldingsEquityTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseDematAccountHoldingsEquityTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsEquityTransaction) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseDematAccountHoldingsEquityTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseDematAccountHoldingsEquityTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsEquityTransactionAdditionalInfo) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsEquityTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseDematAccountHoldingsGovernmentSecurity struct {
 	// Additional information specific to the government security
 	AdditionalInfo UnifiedResponseDematAccountHoldingsGovernmentSecurityAdditionalInfo `json:"additional_info"`
@@ -793,7 +534,7 @@ type UnifiedResponseDematAccountHoldingsGovernmentSecurity struct {
 	// Name of the government security
 	Name string `json:"name"`
 	// List of transactions for this holding (beta)
-	Transactions []UnifiedResponseDematAccountHoldingsGovernmentSecurityTransaction `json:"transactions"`
+	Transactions []Transaction `json:"transactions"`
 	// Number of units held
 	Units float64 `json:"units"`
 	// Current market value of the holding
@@ -837,117 +578,6 @@ func (r UnifiedResponseDematAccountHoldingsGovernmentSecurityAdditionalInfo) Raw
 	return r.JSON.raw
 }
 func (r *UnifiedResponseDematAccountHoldingsGovernmentSecurityAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseDematAccountHoldingsGovernmentSecurityTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseDematAccountHoldingsGovernmentSecurityTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsGovernmentSecurityTransaction) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsGovernmentSecurityTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseDematAccountHoldingsGovernmentSecurityTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountHoldingsGovernmentSecurityTransactionAdditionalInfo) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *UnifiedResponseDematAccountHoldingsGovernmentSecurityTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UnifiedResponseDematAccountLinkedHolder struct {
-	// Name of the account holder
-	Name string `json:"name"`
-	// PAN of the account holder
-	Pan string `json:"pan"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Name        respjson.Field
-		Pan         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseDematAccountLinkedHolder) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseDematAccountLinkedHolder) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1095,7 +725,7 @@ type UnifiedResponseMutualFund struct {
 	// Folio number
 	FolioNumber string `json:"folio_number"`
 	// List of account holders linked to this mutual fund folio
-	LinkedHolders []UnifiedResponseMutualFundLinkedHolder `json:"linked_holders"`
+	LinkedHolders []LinkedHolder `json:"linked_holders"`
 	// Registrar and Transfer Agent name
 	Registrar string                            `json:"registrar"`
 	Schemes   []UnifiedResponseMutualFundScheme `json:"schemes"`
@@ -1145,26 +775,6 @@ func (r *UnifiedResponseMutualFundAdditionalInfo) UnmarshalJSON(data []byte) err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UnifiedResponseMutualFundLinkedHolder struct {
-	// Name of the account holder
-	Name string `json:"name"`
-	// PAN of the account holder
-	Pan string `json:"pan"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Name        respjson.Field
-		Pan         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseMutualFundLinkedHolder) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseMutualFundLinkedHolder) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseMutualFundScheme struct {
 	// Additional information specific to the scheme
 	AdditionalInfo UnifiedResponseMutualFundSchemeAdditionalInfo `json:"additional_info"`
@@ -1178,8 +788,8 @@ type UnifiedResponseMutualFundScheme struct {
 	// Net Asset Value per unit
 	Nav float64 `json:"nav"`
 	// List of nominees
-	Nominees     []string                                     `json:"nominees"`
-	Transactions []UnifiedResponseMutualFundSchemeTransaction `json:"transactions"`
+	Nominees     []string      `json:"nominees"`
+	Transactions []Transaction `json:"transactions"`
 	// Type of mutual fund scheme
 	//
 	// Any of "Equity", "Debt", "Hybrid", "Other".
@@ -1262,93 +872,6 @@ func (r *UnifiedResponseMutualFundSchemeGain) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Unified transaction schema for all holding types (MF folios, equities, bonds,
-// etc.)
-type UnifiedResponseMutualFundSchemeTransaction struct {
-	// Additional transaction-specific fields that vary by source
-	AdditionalInfo UnifiedResponseMutualFundSchemeTransactionAdditionalInfo `json:"additional_info"`
-	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
-	// Balance units after transaction
-	Balance float64 `json:"balance"`
-	// Transaction date (YYYY-MM-DD)
-	Date time.Time `json:"date" format:"date"`
-	// Transaction description/particulars
-	Description string `json:"description"`
-	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
-	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
-	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
-	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
-	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
-	// REVERSAL, UNKNOWN.
-	//
-	// Any of "PURCHASE", "PURCHASE_SIP", "REDEMPTION", "SWITCH_IN",
-	// "SWITCH_IN_MERGER", "SWITCH_OUT", "SWITCH_OUT_MERGER", "DIVIDEND_PAYOUT",
-	// "DIVIDEND_REINVEST", "SEGREGATION", "STAMP_DUTY_TAX", "TDS_TAX", "STT_TAX",
-	// "MISC", "REVERSAL", "UNKNOWN".
-	Type string `json:"type"`
-	// Number of units involved in transaction
-	Units float64 `json:"units"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AdditionalInfo respjson.Field
-		Amount         respjson.Field
-		Balance        respjson.Field
-		Date           respjson.Field
-		Description    respjson.Field
-		DividendRate   respjson.Field
-		Nav            respjson.Field
-		Type           respjson.Field
-		Units          respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseMutualFundSchemeTransaction) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseMutualFundSchemeTransaction) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional transaction-specific fields that vary by source
-type UnifiedResponseMutualFundSchemeTransactionAdditionalInfo struct {
-	// Capital withdrawal amount (CDSL MF transactions)
-	CapitalWithdrawal float64 `json:"capital_withdrawal"`
-	// Units credited (demat transactions)
-	Credit float64 `json:"credit"`
-	// Units debited (demat transactions)
-	Debit float64 `json:"debit"`
-	// Income distribution amount (CDSL MF transactions)
-	IncomeDistribution float64 `json:"income_distribution"`
-	// Order/transaction reference number (demat transactions)
-	OrderNo string `json:"order_no"`
-	// Price per unit (NSDL/CDSL MF transactions)
-	Price float64 `json:"price"`
-	// Stamp duty charged
-	StampDuty float64 `json:"stamp_duty"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CapitalWithdrawal  respjson.Field
-		Credit             respjson.Field
-		Debit              respjson.Field
-		IncomeDistribution respjson.Field
-		OrderNo            respjson.Field
-		Price              respjson.Field
-		StampDuty          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseMutualFundSchemeTransactionAdditionalInfo) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseMutualFundSchemeTransactionAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type UnifiedResponseNp struct {
 	// Additional information specific to the NPS account
 	AdditionalInfo any `json:"additional_info"`
@@ -1356,7 +879,7 @@ type UnifiedResponseNp struct {
 	Cra   string                  `json:"cra"`
 	Funds []UnifiedResponseNpFund `json:"funds"`
 	// List of account holders linked to this NPS account
-	LinkedHolders []UnifiedResponseNpLinkedHolder `json:"linked_holders"`
+	LinkedHolders []LinkedHolder `json:"linked_holders"`
 	// Permanent Retirement Account Number (PRAN)
 	Pran string `json:"pran"`
 	// Total value of the NPS account
@@ -1432,26 +955,6 @@ type UnifiedResponseNpFundAdditionalInfo struct {
 // Returns the unmodified JSON received from the API
 func (r UnifiedResponseNpFundAdditionalInfo) RawJSON() string { return r.JSON.raw }
 func (r *UnifiedResponseNpFundAdditionalInfo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UnifiedResponseNpLinkedHolder struct {
-	// Name of the account holder
-	Name string `json:"name"`
-	// PAN of the account holder
-	Pan string `json:"pan"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Name        respjson.Field
-		Pan         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UnifiedResponseNpLinkedHolder) RawJSON() string { return r.JSON.raw }
-func (r *UnifiedResponseNpLinkedHolder) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1576,7 +1079,7 @@ func (r *UnifiedResponseSummaryAccountsNps) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CasParserCamsKfintechParams struct {
+type CamsKfintechParseParams struct {
 	// Password for the PDF file (if required)
 	Password param.Opt[string] `json:"password,omitzero"`
 	// Base64 encoded CAS PDF file (required if pdf_url not provided)
@@ -1586,64 +1089,10 @@ type CasParserCamsKfintechParams struct {
 	paramObj
 }
 
-func (r CasParserCamsKfintechParams) MarshalJSON() (data []byte, err error) {
-	type shadow CasParserCamsKfintechParams
+func (r CamsKfintechParseParams) MarshalJSON() (data []byte, err error) {
+	type shadow CamsKfintechParseParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *CasParserCamsKfintechParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CasParserCdslParams struct {
-	// Password for the PDF file (if required)
-	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file (required if pdf_url not provided)
-	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file (required if pdf_file not provided)
-	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
-	paramObj
-}
-
-func (r CasParserCdslParams) MarshalJSON() (data []byte, err error) {
-	type shadow CasParserCdslParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *CasParserCdslParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CasParserNsdlParams struct {
-	// Password for the PDF file (if required)
-	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file (required if pdf_url not provided)
-	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file (required if pdf_file not provided)
-	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
-	paramObj
-}
-
-func (r CasParserNsdlParams) MarshalJSON() (data []byte, err error) {
-	type shadow CasParserNsdlParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *CasParserNsdlParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CasParserSmartParseParams struct {
-	// Password for the PDF file (if required)
-	Password param.Opt[string] `json:"password,omitzero"`
-	// Base64 encoded CAS PDF file (required if pdf_url not provided)
-	PdfFile param.Opt[string] `json:"pdf_file,omitzero" format:"base64"`
-	// URL to the CAS PDF file (required if pdf_file not provided)
-	PdfURL param.Opt[string] `json:"pdf_url,omitzero" format:"uri"`
-	paramObj
-}
-
-func (r CasParserSmartParseParams) MarshalJSON() (data []byte, err error) {
-	type shadow CasParserSmartParseParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *CasParserSmartParseParams) UnmarshalJSON(data []byte) error {
+func (r *CamsKfintechParseParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -7,13 +7,14 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/CASParser/cas-parser-go"
 	"github.com/CASParser/cas-parser-go/internal/testutil"
 	"github.com/CASParser/cas-parser-go/option"
 )
 
-func TestCasParserCamsKfintechWithOptionalParams(t *testing.T) {
+func TestInboxCheckConnectionStatus(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,10 +27,8 @@ func TestCasParserCamsKfintechWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.CasParser.CamsKfintech(context.TODO(), casparser.CasParserCamsKfintechParams{
-		Password: casparser.String("password"),
-		PdfFile:  casparser.String("pdf_file"),
-		PdfURL:   casparser.String("https://example.com"),
+	_, err := client.Inbox.CheckConnectionStatus(context.TODO(), casparser.InboxCheckConnectionStatusParams{
+		XInboxToken: "x-inbox-token",
 	})
 	if err != nil {
 		var apierr *casparser.Error
@@ -40,7 +39,7 @@ func TestCasParserCamsKfintechWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCasParserCdslWithOptionalParams(t *testing.T) {
+func TestInboxConnectEmailWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -53,10 +52,9 @@ func TestCasParserCdslWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.CasParser.Cdsl(context.TODO(), casparser.CasParserCdslParams{
-		Password: casparser.String("password"),
-		PdfFile:  casparser.String("pdf_file"),
-		PdfURL:   casparser.String("https://example.com"),
+	_, err := client.Inbox.ConnectEmail(context.TODO(), casparser.InboxConnectEmailParams{
+		RedirectUri: "https://yourapp.com/oauth-callback",
+		State:       casparser.String("abc123"),
 	})
 	if err != nil {
 		var apierr *casparser.Error
@@ -67,7 +65,7 @@ func TestCasParserCdslWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCasParserNsdlWithOptionalParams(t *testing.T) {
+func TestInboxDisconnectEmail(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -80,10 +78,8 @@ func TestCasParserNsdlWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.CasParser.Nsdl(context.TODO(), casparser.CasParserNsdlParams{
-		Password: casparser.String("password"),
-		PdfFile:  casparser.String("pdf_file"),
-		PdfURL:   casparser.String("https://example.com"),
+	_, err := client.Inbox.DisconnectEmail(context.TODO(), casparser.InboxDisconnectEmailParams{
+		XInboxToken: "x-inbox-token",
 	})
 	if err != nil {
 		var apierr *casparser.Error
@@ -94,7 +90,7 @@ func TestCasParserNsdlWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCasParserSmartParseWithOptionalParams(t *testing.T) {
+func TestInboxListCasFilesWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -107,10 +103,11 @@ func TestCasParserSmartParseWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.CasParser.SmartParse(context.TODO(), casparser.CasParserSmartParseParams{
-		Password: casparser.String("password"),
-		PdfFile:  casparser.String("pdf_file"),
-		PdfURL:   casparser.String("https://example.com"),
+	_, err := client.Inbox.ListCasFiles(context.TODO(), casparser.InboxListCasFilesParams{
+		XInboxToken: "x-inbox-token",
+		CasTypes:    []string{"cdsl", "nsdl"},
+		EndDate:     casparser.Time(time.Now()),
+		StartDate:   casparser.Time(time.Now()),
 	})
 	if err != nil {
 		var apierr *casparser.Error

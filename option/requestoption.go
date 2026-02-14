@@ -15,7 +15,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-// RequestOption is an option for the requests made by the CAS Parser API Client
+// RequestOption is an option for the requests made by the cas-parser API Client
 // which can be supplied to clients, services, and methods. You can read more about this functional
 // options pattern in our [README].
 //
@@ -264,6 +264,20 @@ func WithRequestTimeout(dur time.Duration) RequestOption {
 // to use by default.
 func WithEnvironmentProduction() RequestOption {
 	return requestconfig.WithDefaultBaseURL("https://portfolio-parser.api.casparser.in/")
+}
+
+// WithEnvironmentEnvironment1 returns a RequestOption that sets the current
+// environment to be the "environment_1" environment. An environment specifies which base URL
+// to use by default.
+func WithEnvironmentEnvironment1() RequestOption {
+	return requestconfig.WithDefaultBaseURL("https://client-apis.casparser.in/")
+}
+
+// WithEnvironmentEnvironment2 returns a RequestOption that sets the current
+// environment to be the "environment_2" environment. An environment specifies which base URL
+// to use by default.
+func WithEnvironmentEnvironment2() RequestOption {
+	return requestconfig.WithDefaultBaseURL("http://localhost:5000/")
 }
 
 // WithAPIKey returns a RequestOption that sets the client setting "api_key".
