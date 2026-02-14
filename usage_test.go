@@ -24,6 +24,7 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
+	t.Skip("Prism tests are disabled")
 	unifiedResponse, err := client.CasParser.SmartParse(context.TODO(), casparser.CasParserSmartParseParams{
 		Password: casparser.String("ABCDF"),
 		PdfURL:   casparser.String("https://your-cas-pdf-url-here.com"),
