@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 (2026-02-14)
+
+Full Changelog: [v0.2.1...v0.2.2](https://github.com/CASParser/cas-parser-go/compare/v0.2.1...v0.2.2)
+
+### Chores
+
+* update SDK settings ([5ab428d](https://github.com/CASParser/cas-parser-go/commit/5ab428d440f6d14a609c03aeed33db018c6f638d))
+
 ## 0.2.1 (2026-02-14)
 
 Full Changelog: [v0.2.0...v0.2.1](https://github.com/CASParser/cas-parser-go/compare/v0.2.0...v0.2.1)
