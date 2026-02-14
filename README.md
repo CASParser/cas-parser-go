@@ -6,7 +6,7 @@
 
 <!-- x-release-please-end -->
 
-The Cas Parser Go library provides convenient access to the Cas Parser REST API
+The Cas Parser Go library provides convenient access to the [Cas Parser REST API](https://docs.casparser.in)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
