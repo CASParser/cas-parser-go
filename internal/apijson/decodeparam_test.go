@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CASParser/cas-parser-go/internal/apijson"
-	"github.com/CASParser/cas-parser-go/packages/param"
+	"github.com/stainless-sdks/cas-parser-go/internal/apijson"
+	"github.com/stainless-sdks/cas-parser-go/packages/param"
 	"reflect"
 	"testing"
 )

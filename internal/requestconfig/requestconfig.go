@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/CASParser/cas-parser-go/internal"
-	"github.com/CASParser/cas-parser-go/internal/apierror"
-	"github.com/CASParser/cas-parser-go/internal/apiform"
-	"github.com/CASParser/cas-parser-go/internal/apiquery"
+	"github.com/stainless-sdks/cas-parser-go/internal"
+	"github.com/stainless-sdks/cas-parser-go/internal/apierror"
+	"github.com/stainless-sdks/cas-parser-go/internal/apiform"
+	"github.com/stainless-sdks/cas-parser-go/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {

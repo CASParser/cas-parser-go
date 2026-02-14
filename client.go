@@ -8,17 +8,26 @@ import (
 	"os"
 	"slices"
 
-	"github.com/CASParser/cas-parser-go/internal/requestconfig"
-	"github.com/CASParser/cas-parser-go/option"
+	"github.com/stainless-sdks/cas-parser-go/internal/requestconfig"
+	"github.com/stainless-sdks/cas-parser-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
-// interacting with the CAS Parser API. You should not instantiate this client
+// interacting with the cas-parser API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
 	Options      []option.RequestOption
-	CasParser    CasParserService
-	CasGenerator CasGeneratorService
+	Credits      CreditService
+	Logs         LogService
+	AccessToken  AccessTokenService
+	VerifyToken  VerifyTokenService
+	CamsKfintech CamsKfintechService
+	Cdsl         CdslService
+	ContractNote ContractNoteService
+	Inbox        InboxService
+	Kfintech     KfintechService
+	Nsdl         NsdlService
+	Smart        SmartService
 }
 
 // DefaultClientOptions read from the environment (CAS_PARSER_API_KEY,
@@ -43,8 +52,17 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 
 	r = Client{Options: opts}
 
-	r.CasParser = NewCasParserService(opts...)
-	r.CasGenerator = NewCasGeneratorService(opts...)
+	r.Credits = NewCreditService(opts...)
+	r.Logs = NewLogService(opts...)
+	r.AccessToken = NewAccessTokenService(opts...)
+	r.VerifyToken = NewVerifyTokenService(opts...)
+	r.CamsKfintech = NewCamsKfintechService(opts...)
+	r.Cdsl = NewCdslService(opts...)
+	r.ContractNote = NewContractNoteService(opts...)
+	r.Inbox = NewInboxService(opts...)
+	r.Kfintech = NewKfintechService(opts...)
+	r.Nsdl = NewNsdlService(opts...)
+	r.Smart = NewSmartService(opts...)
 
 	return
 }

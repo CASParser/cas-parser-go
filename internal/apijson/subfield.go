@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/CASParser/cas-parser-go/packages/respjson"
+	"github.com/stainless-sdks/cas-parser-go/packages/respjson"
 	"reflect"
 )
 

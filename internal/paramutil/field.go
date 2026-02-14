@@ -1,8 +1,8 @@
 package paramutil
 
 import (
-	"github.com/CASParser/cas-parser-go/packages/param"
-	"github.com/CASParser/cas-parser-go/packages/respjson"
+	"github.com/stainless-sdks/cas-parser-go/packages/param"
+	"github.com/stainless-sdks/cas-parser-go/packages/respjson"
 )
 
 func AddrIfPresent[T comparable](v param.Opt[T]) *T {

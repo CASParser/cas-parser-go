@@ -4,6 +4,7 @@ package casparser_test
 
 import (
 	"context"
+	"errors"
 	"os"
 	"testing"
 
@@ -12,7 +13,8 @@ import (
 	"github.com/stainless-sdks/cas-parser-go/option"
 )
 
-func TestUsage(t *testing.T) {
+func TestAccessTokenNewWithOptionalParams(t *testing.T) {
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,10 +26,14 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	t.Skip("Prism tests are disabled")
-	response, err := client.Credits.Check(context.TODO())
+	_, err := client.AccessToken.New(context.TODO(), casparser.AccessTokenNewParams{
+		ExpiryMinutes: casparser.Int(60),
+	})
 	if err != nil {
+		var apierr *casparser.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.EnabledFeatures)
 }

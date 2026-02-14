@@ -7,7 +7,7 @@ package apijson
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CASParser/cas-parser-go/packages/param"
+	"github.com/stainless-sdks/cas-parser-go/packages/param"
 	"reflect"
 	"strconv"
 	"sync"
