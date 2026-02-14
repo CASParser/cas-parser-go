@@ -14,7 +14,7 @@ import (
 	"encoding"
 	"encoding/base64"
 	"fmt"
-	"github.com/CASParser/cas-parser-go/internal/encoding/json/shims"
+	"github.com/stainless-sdks/cas-parser-go/internal/encoding/json/shims"
 	"reflect"
 	"strconv"
 	"strings"

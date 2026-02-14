@@ -3,7 +3,7 @@ package param
 import (
 	"encoding/json"
 	"fmt"
-	shimjson "github.com/CASParser/cas-parser-go/internal/encoding/json"
+	shimjson "github.com/stainless-sdks/cas-parser-go/internal/encoding/json"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package param
 
 import (
 	"encoding/json"
-	"github.com/CASParser/cas-parser-go/internal/encoding/json/sentinel"
+	"github.com/stainless-sdks/cas-parser-go/internal/encoding/json/sentinel"
 	"reflect"
 )
 

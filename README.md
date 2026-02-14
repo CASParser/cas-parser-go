@@ -2,45 +2,28 @@
 
 <!-- x-release-please-start-version -->
 
-<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go"><img src="https://pkg.go.dev/badge/github.com/CASParser/cas-parser-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/stainless-sdks/cas-parser-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/cas-parser-go.svg" alt="Go Reference"></a>
 
 <!-- x-release-please-end -->
 
-The Cas Parser Go library provides convenient access to the [Cas Parser REST API](https://docs.casparser.in/reference)
+The Cas Parser Go library provides convenient access to the Cas Parser REST API
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-## MCP Server
-
-Use the Cas Parser MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=cas-parser-node-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNhcy1wYXJzZXItbm9kZS1tY3AiXSwiZW52Ijp7IkNBU19QQVJTRVJfQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22cas-parser-node-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22cas-parser-node-mcp%22%5D%2C%22env%22%3A%7B%22CAS_PARSER_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)
-
-> Note: You may need to set environment variables in your MCP client.
-
 ## Installation
-
-<!-- x-release-please-start-version -->
 
 ```go
 import (
-	"github.com/CASParser/cas-parser-go" // imported as casparser
+	"github.com/stainless-sdks/cas-parser-go" // imported as casparser
 )
 ```
 
-<!-- x-release-please-end -->
-
 Or to pin the version:
 
-<!-- x-release-please-start-version -->
-
 ```sh
-go get -u 'github.com/CASParser/cas-parser-go@v0.1.0'
+go get -u 'github.com/stainless-sdks/cas-parser-go@v0.1.0'
 ```
-
-<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -57,22 +40,20 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CASParser/cas-parser-go"
-	"github.com/CASParser/cas-parser-go/option"
+	"github.com/stainless-sdks/cas-parser-go"
+	"github.com/stainless-sdks/cas-parser-go/option"
 )
 
 func main() {
 	client := casparser.NewClient(
-		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CAS_PARSER_API_KEY")
+		option.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("CAS_PARSER_API_KEY")
+		option.WithEnvironmentEnvironment1(), // or option.WithEnvironmentProduction() | option.WithEnvironmentEnvironment2(); defaults to option.WithEnvironmentProduction()
 	)
-	unifiedResponse, err := client.CasParser.SmartParse(context.TODO(), casparser.CasParserSmartParseParams{
-		Password: casparser.String("ABCDF"),
-		PdfURL:   casparser.String("https://your-cas-pdf-url-here.com"),
-	})
+	response, err := client.Credits.Check(context.TODO())
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", unifiedResponse.DematAccounts)
+	fmt.Printf("%+v\n", response.EnabledFeatures)
 }
 
 ```
@@ -278,7 +259,7 @@ client := casparser.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.CasParser.SmartParse(context.TODO(), ...,
+client.Credits.Check(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -288,7 +269,7 @@ client.CasParser.SmartParse(context.TODO(), ...,
 
 The request option `option.WithDebugLog(nil)` may be helpful while debugging.
 
-See the [full list of request options](https://pkg.go.dev/github.com/CASParser/cas-parser-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/cas-parser-go/option).
 
 ### Pagination
 
@@ -309,17 +290,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.CasParser.SmartParse(context.TODO(), casparser.CasParserSmartParseParams{
-	Password: casparser.String("ABCDF"),
-	PdfURL:   casparser.String("https://you-cas-pdf-url-here.com"),
-})
+_, err := client.Credits.Check(context.TODO())
 if err != nil {
 	var apierr *casparser.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v4/smart/parse": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/credits": 400 Bad Request { ... }
 }
 ```
 
@@ -337,12 +315,8 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.CasParser.SmartParse(
+client.Credits.Check(
 	ctx,
-	casparser.CasParserSmartParseParams{
-		Password: casparser.String("ABCDF"),
-		PdfURL:   casparser.String("https://you-cas-pdf-url-here.com"),
-	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -376,14 +350,7 @@ client := casparser.NewClient(
 )
 
 // Override per-request:
-client.CasParser.SmartParse(
-	context.TODO(),
-	casparser.CasParserSmartParseParams{
-		Password: casparser.String("ABCDF"),
-		PdfURL:   casparser.String("https://you-cas-pdf-url-here.com"),
-	},
-	option.WithMaxRetries(5),
-)
+client.Credits.Check(context.TODO(), option.WithMaxRetries(5))
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -394,18 +361,11 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-unifiedResponse, err := client.CasParser.SmartParse(
-	context.TODO(),
-	casparser.CasParserSmartParseParams{
-		Password: casparser.String("ABCDF"),
-		PdfURL:   casparser.String("https://you-cas-pdf-url-here.com"),
-	},
-	option.WithResponseInto(&response),
-)
+response, err := client.Credits.Check(context.TODO(), option.WithResponseInto(&response))
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", unifiedResponse)
+fmt.Printf("%+v\n", response)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
@@ -506,7 +466,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/CASParser/cas-parser-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/cas-parser-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

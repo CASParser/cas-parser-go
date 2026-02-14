@@ -2,7 +2,7 @@ package apijson
 
 import (
 	"errors"
-	"github.com/CASParser/cas-parser-go/packages/param"
+	"github.com/stainless-sdks/cas-parser-go/packages/param"
 	"reflect"
 
 	"github.com/tidwall/gjson"

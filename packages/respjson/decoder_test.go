@@ -3,8 +3,8 @@ package respjson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CASParser/cas-parser-go/internal/apijson"
-	rj "github.com/CASParser/cas-parser-go/packages/respjson"
+	"github.com/stainless-sdks/cas-parser-go/internal/apijson"
+	rj "github.com/stainless-sdks/cas-parser-go/packages/respjson"
 	"reflect"
 	"testing"
 )
