@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-sdks/cas-parser-go/internal/apijson"
-	"github.com/stainless-sdks/cas-parser-go/packages/respjson"
+	"github.com/CASParser/cas-parser-go/internal/apijson"
+	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

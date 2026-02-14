@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/stainless-sdks/cas-parser-go/internal/apijson"
-	"github.com/stainless-sdks/cas-parser-go/internal/requestconfig"
-	"github.com/stainless-sdks/cas-parser-go/option"
-	"github.com/stainless-sdks/cas-parser-go/packages/respjson"
+	"github.com/CASParser/cas-parser-go/internal/apijson"
+	"github.com/CASParser/cas-parser-go/internal/requestconfig"
+	"github.com/CASParser/cas-parser-go/option"
+	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
 // VerifyTokenService contains methods and other services that help with

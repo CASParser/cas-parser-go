@@ -1,4 +1,4 @@
-module github.com/stainless-sdks/cas-parser-go
+module github.com/CASParser/cas-parser-go
 
 go 1.22
 
