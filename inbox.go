@@ -41,7 +41,7 @@ func NewInboxService(opts ...option.RequestOption) (r InboxService) {
 // access in their email provider settings).
 func (r *InboxService) CheckConnectionStatus(ctx context.Context, body InboxCheckConnectionStatusParams, opts ...option.RequestOption) (res *InboxCheckConnectionStatusResponse, err error) {
 	if !param.IsOmitted(body.XInboxToken) {
-		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%s", body.XInboxToken)))
+		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%v", body.XInboxToken)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/status"
@@ -83,7 +83,7 @@ func (r *InboxService) ConnectEmail(ctx context.Context, body InboxConnectEmailP
 // After calling this, the `inbox_token` becomes unusable.
 func (r *InboxService) DisconnectEmail(ctx context.Context, body InboxDisconnectEmailParams, opts ...option.RequestOption) (res *InboxDisconnectEmailResponse, err error) {
 	if !param.IsOmitted(body.XInboxToken) {
-		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%s", body.XInboxToken)))
+		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%v", body.XInboxToken)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/disconnect"
@@ -102,7 +102,7 @@ func (r *InboxService) DisconnectEmail(ctx context.Context, body InboxDisconnect
 // files found).
 func (r *InboxService) ListCasFiles(ctx context.Context, params InboxListCasFilesParams, opts ...option.RequestOption) (res *InboxListCasFilesResponse, err error) {
 	if !param.IsOmitted(params.XInboxToken) {
-		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%s", params.XInboxToken)))
+		opts = append(opts, option.WithHeader("x-inbox-token", fmt.Sprintf("%v", params.XInboxToken)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/cas"

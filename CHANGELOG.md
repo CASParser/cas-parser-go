@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.1 (2026-02-20)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/CASParser/cas-parser-go/compare/v0.3.0...v0.3.1)
+
+### Bug Fixes
+
+* allow canceling a request while it is waiting to retry ([63aa0f0](https://github.com/CASParser/cas-parser-go/commit/63aa0f04dc1cd584e50deb4ba2f529ae54d0e624))
+* **client:** use correct format specifier for header serialization ([9b3f4fd](https://github.com/CASParser/cas-parser-go/commit/9b3f4fd9c3c01fcebacb10306c468b1019888e8b))
+
+
+### Chores
+
+* **internal:** remove mock server code ([2c3a380](https://github.com/CASParser/cas-parser-go/commit/2c3a380445b0150b03cee471ac806dc1710ad8fc))
+* update mock server docs ([059ab0b](https://github.com/CASParser/cas-parser-go/commit/059ab0ba58a86bbeacf3482d64a0e44a1157355e))
+
 ## 0.3.0 (2026-02-14)
 
 Full Changelog: [v0.2.2...v0.3.0](https://github.com/CASParser/cas-parser-go/compare/v0.2.2...v0.3.0)
