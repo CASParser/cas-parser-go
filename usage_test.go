@@ -25,9 +25,9 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	t.Skip("Mock server tests are disabled")
-	response, err := client.Credits.Check(context.TODO())
+	unifiedResponse, err := client.CamsKfintech.Parse(context.TODO(), casparser.CamsKfintechParseParams{})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.EnabledFeatures)
+	t.Logf("%+v\n", unifiedResponse.DematAccounts)
 }

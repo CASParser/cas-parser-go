@@ -1,44 +1,10 @@
 # Credits
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditCheckResponse">CreditCheckResponse</a>
-
-Methods:
-
-- <code title="post /credits">client.Credits.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditService.Check">Check</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditCheckResponse">CreditCheckResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # Logs
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewResponse">LogNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryResponse">LogGetSummaryResponse</a>
-
-Methods:
-
-- <code title="post /logs">client.Logs.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewParams">LogNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewResponse">LogNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /logs/summary">client.Logs.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogService.GetSummary">GetSummary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryParams">LogGetSummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryResponse">LogGetSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AccessToken
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewResponse">AccessTokenNewResponse</a>
-
-Methods:
-
-- <code title="post /v1/access-token">client.AccessToken.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewParams">AccessTokenNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewResponse">AccessTokenNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # VerifyToken
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenVerifyResponse">VerifyTokenVerifyResponse</a>
-
-Methods:
-
-- <code title="post /v1/verify-token">client.VerifyToken.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenService.Verify">Verify</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenVerifyResponse">VerifyTokenVerifyResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # CamsKfintech
 

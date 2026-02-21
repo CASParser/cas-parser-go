@@ -3,14 +3,7 @@
 package casparser
 
 import (
-	"context"
-	"net/http"
-	"slices"
-
-	"github.com/CASParser/cas-parser-go/internal/apijson"
-	"github.com/CASParser/cas-parser-go/internal/requestconfig"
 	"github.com/CASParser/cas-parser-go/option"
-	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
 // VerifyTokenService contains methods and other services that help with
@@ -30,36 +23,4 @@ func NewVerifyTokenService(opts ...option.RequestOption) (r VerifyTokenService) 
 	r = VerifyTokenService{}
 	r.Options = opts
 	return
-}
-
-// Verify an access token and check if it's still valid. Useful for debugging token
-// issues.
-func (r *VerifyTokenService) Verify(ctx context.Context, opts ...option.RequestOption) (res *VerifyTokenVerifyResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	path := "v1/verify-token"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
-}
-
-type VerifyTokenVerifyResponse struct {
-	// Error message (only shown if invalid)
-	Error string `json:"error"`
-	// Masked API key (only shown if valid)
-	MaskedAPIKey string `json:"masked_api_key"`
-	// Whether the token is valid
-	Valid bool `json:"valid"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Error        respjson.Field
-		MaskedAPIKey respjson.Field
-		Valid        respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r VerifyTokenVerifyResponse) RawJSON() string { return r.JSON.raw }
-func (r *VerifyTokenVerifyResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }
