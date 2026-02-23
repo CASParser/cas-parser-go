@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2026-02-23)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/CASParser/cas-parser-go/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** manual updates ([e6e91f2](https://github.com/CASParser/cas-parser-go/commit/e6e91f2b8484a34b154fd55f9297183a9ff9870c))
+
 ## 0.4.0 (2026-02-23)
 
 Full Changelog: [v0.3.1...v0.4.0](https://github.com/CASParser/cas-parser-go/compare/v0.3.1...v0.4.0)

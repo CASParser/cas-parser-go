@@ -6,7 +6,7 @@
 
 <!-- x-release-please-end -->
 
-The Cas Parser Go library provides convenient access to the [Cas Parser REST API](https://docs.casparser.in)
+The Cas Parser Go library provides convenient access to the [Cas Parser REST API](https://casparser.in/docs)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -37,7 +37,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/CASParser/cas-parser-go@v0.4.0'
+go get -u 'github.com/CASParser/cas-parser-go@v0.5.0'
 ```
 
 <!-- x-release-please-end -->
@@ -63,8 +63,7 @@ import (
 
 func main() {
 	client := casparser.NewClient(
-		option.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("CAS_PARSER_API_KEY")
-		option.WithEnvironmentEnvironment1(), // or option.WithEnvironmentProduction() | option.WithEnvironmentEnvironment2(); defaults to option.WithEnvironmentProduction()
+		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("CAS_PARSER_API_KEY")
 	)
 	response, err := client.Credits.Check(context.TODO())
 	if err != nil {
