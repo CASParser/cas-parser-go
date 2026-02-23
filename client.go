@@ -28,6 +28,7 @@ type Client struct {
 	Kfintech     KfintechService
 	Nsdl         NsdlService
 	Smart        SmartService
+	InboundEmail InboundEmailService
 }
 
 // DefaultClientOptions read from the environment (CAS_PARSER_API_KEY,
@@ -63,6 +64,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Kfintech = NewKfintechService(opts...)
 	r.Nsdl = NewNsdlService(opts...)
 	r.Smart = NewSmartService(opts...)
+	r.InboundEmail = NewInboundEmailService(opts...)
 
 	return
 }
