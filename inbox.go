@@ -211,6 +211,9 @@ type InboxListCasFilesResponseFile struct {
 	MessageID string `json:"message_id"`
 	// Original attachment filename from the email
 	OriginalFilename string `json:"original_filename"`
+	// Email address of the CAS authority (CDSL, NSDL, CAMS, or KFintech) who
+	// originally sent this statement
+	SenderEmail string `json:"sender_email" format:"email"`
 	// File size in bytes
 	Size int64 `json:"size"`
 	// Direct download URL (presigned, expires based on expires_in)
@@ -223,6 +226,7 @@ type InboxListCasFilesResponseFile struct {
 		MessageDate      respjson.Field
 		MessageID        respjson.Field
 		OriginalFilename respjson.Field
+		SenderEmail      respjson.Field
 		Size             respjson.Field
 		URL              respjson.Field
 		ExtraFields      map[string]respjson.Field

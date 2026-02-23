@@ -36,7 +36,7 @@ func NewVerifyTokenService(opts ...option.RequestOption) (r VerifyTokenService) 
 // issues.
 func (r *VerifyTokenService) Verify(ctx context.Context, opts ...option.RequestOption) (res *VerifyTokenVerifyResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := "v1/verify-token"
+	path := "v1/token/verify"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }

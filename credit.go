@@ -44,7 +44,7 @@ func NewCreditService(opts ...option.RequestOption) (r CreditService) {
 // Credits reset at the start of each billing period.
 func (r *CreditService) Check(ctx context.Context, opts ...option.RequestOption) (res *CreditCheckResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := "credits"
+	path := "v1/credits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }

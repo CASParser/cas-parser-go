@@ -38,9 +38,11 @@ func NewLogService(opts ...option.RequestOption) (r LogService) {
 //
 // Returns a list of API calls with timestamps, features used, status codes, and
 // credits consumed. Useful for monitoring usage patterns and debugging.
+//
+// **Legacy path:** `/logs` (still supported)
 func (r *LogService) New(ctx context.Context, body LogNewParams, opts ...option.RequestOption) (res *LogNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := "logs"
+	path := "v1/usage"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
@@ -49,9 +51,11 @@ func (r *LogService) New(ctx context.Context, body LogNewParams, opts ...option.
 //
 // Useful for understanding which API features are being used most and tracking
 // usage trends.
+//
+// **Legacy path:** `/logs/summary` (still supported)
 func (r *LogService) GetSummary(ctx context.Context, body LogGetSummaryParams, opts ...option.RequestOption) (res *LogGetSummaryResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := "logs/summary"
+	path := "v1/usage/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
