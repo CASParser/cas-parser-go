@@ -211,7 +211,8 @@ type InboxListCasFilesResponseFile struct {
 	MessageID string `json:"message_id"`
 	// Original attachment filename from the email
 	OriginalFilename string `json:"original_filename"`
-	// Email address of the CAS authority who sent this
+	// Email address of the CAS authority (CDSL, NSDL, CAMS, or KFintech) who
+	// originally sent this statement
 	SenderEmail string `json:"sender_email" format:"email"`
 	// File size in bytes
 	Size int64 `json:"size"`
