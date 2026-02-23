@@ -1,10 +1,44 @@
 # Credits
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditCheckResponse">CreditCheckResponse</a>
+
+Methods:
+
+- <code title="post /v1/credits">client.Credits.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditService.Check">Check</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#CreditCheckResponse">CreditCheckResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # Logs
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewResponse">LogNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryResponse">LogGetSummaryResponse</a>
+
+Methods:
+
+- <code title="post /v1/usage">client.Logs.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewParams">LogNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogNewResponse">LogNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /v1/usage/summary">client.Logs.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogService.GetSummary">GetSummary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryParams">LogGetSummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#LogGetSummaryResponse">LogGetSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AccessToken
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewResponse">AccessTokenNewResponse</a>
+
+Methods:
+
+- <code title="post /v1/token">client.AccessToken.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewParams">AccessTokenNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#AccessTokenNewResponse">AccessTokenNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # VerifyToken
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenVerifyResponse">VerifyTokenVerifyResponse</a>
+
+Methods:
+
+- <code title="post /v1/token/verify">client.VerifyToken.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenService.Verify">Verify</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#VerifyTokenVerifyResponse">VerifyTokenVerifyResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # CamsKfintech
 
@@ -83,3 +117,19 @@ Methods:
 Methods:
 
 - <code title="post /v4/smart/parse">client.Smart.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#SmartService.ParseCasPdf">ParseCasPdf</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#SmartParseCasPdfParams">SmartParseCasPdfParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#UnifiedResponse">UnifiedResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# InboundEmail
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailNewResponse">InboundEmailNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailGetResponse">InboundEmailGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailListResponse">InboundEmailListResponse</a>
+- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailDeleteResponse">InboundEmailDeleteResponse</a>
+
+Methods:
+
+- <code title="post /v4/inbound-email">client.InboundEmail.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailNewParams">InboundEmailNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailNewResponse">InboundEmailNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v4/inbound-email/{inbound_email_id}">client.InboundEmail.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, inboundEmailID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailGetResponse">InboundEmailGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v4/inbound-email">client.InboundEmail.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailListParams">InboundEmailListParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailListResponse">InboundEmailListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /v4/inbound-email/{inbound_email_id}">client.InboundEmail.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, inboundEmailID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#InboundEmailDeleteResponse">InboundEmailDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

@@ -66,11 +66,11 @@ func main() {
 		option.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("CAS_PARSER_API_KEY")
 		option.WithEnvironmentEnvironment1(), // or option.WithEnvironmentProduction() | option.WithEnvironmentEnvironment2(); defaults to option.WithEnvironmentProduction()
 	)
-	unifiedResponse, err := client.CamsKfintech.Parse(context.TODO(), casparser.CamsKfintechParseParams{})
+	response, err := client.Credits.Check(context.TODO())
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", unifiedResponse.DematAccounts)
+	fmt.Printf("%+v\n", response.EnabledFeatures)
 }
 
 ```
@@ -276,7 +276,7 @@ client := casparser.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.CamsKfintech.Parse(context.TODO(), ...,
+client.Credits.Check(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -307,14 +307,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.CamsKfintech.Parse(context.TODO(), casparser.CamsKfintechParseParams{})
+_, err := client.Credits.Check(context.TODO())
 if err != nil {
 	var apierr *casparser.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v4/cams_kfintech/parse": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v1/credits": 400 Bad Request { ... }
 }
 ```
 
@@ -332,9 +332,8 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.CamsKfintech.Parse(
+client.Credits.Check(
 	ctx,
-	casparser.CamsKfintechParseParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -368,11 +367,7 @@ client := casparser.NewClient(
 )
 
 // Override per-request:
-client.CamsKfintech.Parse(
-	context.TODO(),
-	casparser.CamsKfintechParseParams{},
-	option.WithMaxRetries(5),
-)
+client.Credits.Check(context.TODO(), option.WithMaxRetries(5))
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -383,15 +378,11 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-unifiedResponse, err := client.CamsKfintech.Parse(
-	context.TODO(),
-	casparser.CamsKfintechParseParams{},
-	option.WithResponseInto(&response),
-)
+response, err := client.Credits.Check(context.TODO(), option.WithResponseInto(&response))
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", unifiedResponse)
+fmt.Printf("%+v\n", response)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
