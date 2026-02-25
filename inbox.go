@@ -241,13 +241,13 @@ func (r *InboxListCasFilesResponseFile) UnmarshalJSON(data []byte) error {
 }
 
 type InboxCheckConnectionStatusParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxConnectEmailParams struct {
 	// Your callback URL to receive the inbox_token (must be http or https)
-	RedirectUri string `json:"redirect_uri,required" format:"uri"`
+	RedirectUri string `json:"redirect_uri" api:"required" format:"uri"`
 	// State parameter for CSRF protection (returned in redirect)
 	State param.Opt[string] `json:"state,omitzero"`
 	paramObj
@@ -262,12 +262,12 @@ func (r *InboxConnectEmailParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxDisconnectEmailParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxListCasFilesParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	// End date in ISO format (YYYY-MM-DD). Defaults to today.
 	EndDate param.Opt[time.Time] `json:"end_date,omitzero" format:"date"`
 	// Start date in ISO format (YYYY-MM-DD). Defaults to 30 days ago.
