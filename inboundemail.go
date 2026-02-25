@@ -119,7 +119,7 @@ type InboundEmailNewResponse struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -173,7 +173,7 @@ type InboundEmailGetResponse struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -252,7 +252,7 @@ type InboundEmailListResponseInboundEmail struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -302,7 +302,7 @@ func (r *InboundEmailDeleteResponse) UnmarshalJSON(data []byte) error {
 type InboundEmailNewParams struct {
 	// Webhook URL where we POST email notifications. Must be HTTPS in production (HTTP
 	// allowed for localhost during development).
-	CallbackURL string `json:"callback_url,required" format:"uri"`
+	CallbackURL string `json:"callback_url" api:"required" format:"uri"`
 	// Optional custom email prefix for user-friendly addresses.
 	//
 	// - Must be 3-32 characters
