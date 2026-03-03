@@ -16,6 +16,25 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for importing CAS files directly from user email inboxes.
+//
+// **Supported Providers:** Gmail (more coming soon)
+//
+// **How it works:**
+//
+//  1. Call `POST /v4/inbox/connect` to get an OAuth URL
+//  2. Redirect user to the OAuth URL for consent
+//  3. User is redirected back to your `redirect_uri` with an encrypted
+//     `inbox_token`
+//  4. Use the token to list/fetch CAS files from their inbox (`/v4/inbox/cas`)
+//  5. Files are uploaded to temporary cloud storage (URLs expire in 24 hours)
+//
+// **Security:**
+//
+// - Read-only access (we cannot send emails)
+// - Tokens are encrypted with server-side secret
+// - User can revoke access anytime via `/v4/inbox/disconnect`
+//
 // InboxService contains methods and other services that help with interacting with
 // the cas-parser API.
 //
@@ -241,13 +260,13 @@ func (r *InboxListCasFilesResponseFile) UnmarshalJSON(data []byte) error {
 }
 
 type InboxCheckConnectionStatusParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxConnectEmailParams struct {
 	// Your callback URL to receive the inbox_token (must be http or https)
-	RedirectUri string `json:"redirect_uri,required" format:"uri"`
+	RedirectUri string `json:"redirect_uri" api:"required" format:"uri"`
 	// State parameter for CSRF protection (returned in redirect)
 	State param.Opt[string] `json:"state,omitzero"`
 	paramObj
@@ -262,12 +281,12 @@ func (r *InboxConnectEmailParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxDisconnectEmailParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxListCasFilesParams struct {
-	XInboxToken string `header:"x-inbox-token,required" json:"-"`
+	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
 	// End date in ISO format (YYYY-MM-DD). Defaults to today.
 	EndDate param.Opt[time.Time] `json:"end_date,omitzero" format:"date"`
 	// Start date in ISO format (YYYY-MM-DD). Defaults to 30 days ago.

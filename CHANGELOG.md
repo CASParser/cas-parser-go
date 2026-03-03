@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.1 (2026-03-03)
+
+Full Changelog: [v0.5.0...v0.5.1](https://github.com/CASParser/cas-parser-go/compare/v0.5.0...v0.5.1)
+
+### Chores
+
+* **internal:** codegen related update ([30c321b](https://github.com/CASParser/cas-parser-go/commit/30c321bc71574888f59d690cd0bfc984bcbf1855))
+* **internal:** move custom custom `json` tags to `api` ([54c32e5](https://github.com/CASParser/cas-parser-go/commit/54c32e5ef17c4c66f25b0c3efa3090827b1f6cb5))
+
 ## 0.5.0 (2026-02-23)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/CASParser/cas-parser-go/compare/v0.4.0...v0.5.0)

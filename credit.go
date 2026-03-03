@@ -14,6 +14,9 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for checking API quota and credits usage. These endpoints help you
+// monitor your API usage and remaining quota.
+//
 // CreditService contains methods and other services that help with interacting
 // with the cas-parser API.
 //
@@ -57,9 +60,9 @@ type CreditCheckResponse struct {
 	// Total credit limit for billing period
 	Limit int64 `json:"limit"`
 	// Remaining credits (null if unlimited)
-	Remaining float64 `json:"remaining,nullable"`
+	Remaining float64 `json:"remaining" api:"nullable"`
 	// When credits reset (ISO 8601)
-	ResetsAt time.Time `json:"resets_at,nullable" format:"date-time"`
+	ResetsAt time.Time `json:"resets_at" api:"nullable" format:"date-time"`
 	// Number of credits used this billing period
 	Used float64 `json:"used"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].

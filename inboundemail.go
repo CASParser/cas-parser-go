@@ -19,6 +19,34 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Create dedicated inbound email addresses for investors to forward their CAS
+// statements.
+//
+// **Use Case:** Your app wants to collect CAS statements from users without
+// requiring OAuth or file upload.
+//
+// **How it works:**
+//
+//  1. Call `POST /v4/inbound-email` to create a unique inbound email address
+//  2. Display this email to your user: "Forward your CAS statement to
+//     ie_xxx@import.casparser.in"
+//  3. When user forwards a CAS email, we verify sender authenticity (SPF/DKIM) and
+//     call your webhook
+//  4. Your webhook receives email metadata + attachment download URLs
+//
+// **Sender Validation:**
+//
+// - Only emails from verified CAS authorities are processed:
+//   - CDSL: `eCAS@cdslstatement.com`
+//   - NSDL: `NSDL-CAS@nsdl.co.in`
+//   - CAMS: `donotreply@camsonline.com`
+//   - KFintech: `samfS@kfintech.com`
+//
+// - Emails failing SPF/DKIM/DMARC are rejected
+// - Forwarded emails must contain the original sender in headers
+//
+// **Billing:** 0.2 credits per successfully processed valid email
+//
 // InboundEmailService contains methods and other services that help with
 // interacting with the cas-parser API.
 //
@@ -119,7 +147,7 @@ type InboundEmailNewResponse struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -173,7 +201,7 @@ type InboundEmailGetResponse struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -252,7 +280,7 @@ type InboundEmailListResponseInboundEmail struct {
 	// Custom key-value metadata
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
-	Reference string `json:"reference,nullable"`
+	Reference string `json:"reference" api:"nullable"`
 	// Current mailbox status
 	//
 	// Any of "active", "paused".
@@ -302,7 +330,7 @@ func (r *InboundEmailDeleteResponse) UnmarshalJSON(data []byte) error {
 type InboundEmailNewParams struct {
 	// Webhook URL where we POST email notifications. Must be HTTPS in production (HTTP
 	// allowed for localhost during development).
-	CallbackURL string `json:"callback_url,required" format:"uri"`
+	CallbackURL string `json:"callback_url" api:"required" format:"uri"`
 	// Optional custom email prefix for user-friendly addresses.
 	//
 	// - Must be 3-32 characters

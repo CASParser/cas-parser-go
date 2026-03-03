@@ -15,6 +15,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for parsing CAS PDF files from different sources.
+//
 // CamsKfintechService contains methods and other services that help with
 // interacting with the cas-parser API.
 //
@@ -70,7 +72,7 @@ type Transaction struct {
 	// Additional transaction-specific fields that vary by source
 	AdditionalInfo TransactionAdditionalInfo `json:"additional_info"`
 	// Transaction amount in currency (computed from units × price/NAV)
-	Amount float64 `json:"amount,nullable"`
+	Amount float64 `json:"amount" api:"nullable"`
 	// Balance units after transaction
 	Balance float64 `json:"balance"`
 	// Transaction date (YYYY-MM-DD)
@@ -78,9 +80,9 @@ type Transaction struct {
 	// Transaction description/particulars
 	Description string `json:"description"`
 	// Dividend rate (for DIVIDEND_PAYOUT transactions)
-	DividendRate float64 `json:"dividend_rate,nullable"`
+	DividendRate float64 `json:"dividend_rate" api:"nullable"`
 	// NAV/price per unit on transaction date
-	Nav float64 `json:"nav,nullable"`
+	Nav float64 `json:"nav" api:"nullable"`
 	// Transaction type. Possible values are PURCHASE, PURCHASE_SIP, REDEMPTION,
 	// SWITCH_IN, SWITCH_IN_MERGER, SWITCH_OUT, SWITCH_OUT_MERGER, DIVIDEND_PAYOUT,
 	// DIVIDEND_REINVEST, SEGREGATION, STAMP_DUTY_TAX, TDS_TAX, STT_TAX, MISC,
@@ -345,9 +347,9 @@ func (r *UnifiedResponseDematAccountHoldingsAif) UnmarshalJSON(data []byte) erro
 // Additional information specific to the AIF
 type UnifiedResponseDematAccountHoldingsAifAdditionalInfo struct {
 	// Closing balance units for the statement period (beta)
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period (beta)
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CloseUnits  respjson.Field
@@ -398,9 +400,9 @@ func (r *UnifiedResponseDematAccountHoldingsCorporateBond) UnmarshalJSON(data []
 // Additional information specific to the corporate bond
 type UnifiedResponseDematAccountHoldingsCorporateBondAdditionalInfo struct {
 	// Closing balance units for the statement period (beta)
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period (beta)
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CloseUnits  respjson.Field
@@ -453,9 +455,9 @@ func (r *UnifiedResponseDematAccountHoldingsDematMutualFund) UnmarshalJSON(data 
 // Additional information specific to the mutual fund
 type UnifiedResponseDematAccountHoldingsDematMutualFundAdditionalInfo struct {
 	// Closing balance units for the statement period (beta)
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period (beta)
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CloseUnits  respjson.Field
@@ -508,9 +510,9 @@ func (r *UnifiedResponseDematAccountHoldingsEquity) UnmarshalJSON(data []byte) e
 // Additional information specific to the equity
 type UnifiedResponseDematAccountHoldingsEquityAdditionalInfo struct {
 	// Closing balance units for the statement period (beta)
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period (beta)
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CloseUnits  respjson.Field
@@ -561,9 +563,9 @@ func (r *UnifiedResponseDematAccountHoldingsGovernmentSecurity) UnmarshalJSON(da
 // Additional information specific to the government security
 type UnifiedResponseDematAccountHoldingsGovernmentSecurityAdditionalInfo struct {
 	// Closing balance units for the statement period (beta)
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period (beta)
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CloseUnits  respjson.Field
@@ -829,9 +831,9 @@ type UnifiedResponseMutualFundSchemeAdditionalInfo struct {
 	// AMFI code for the scheme (CAMS/KFintech)
 	Amfi string `json:"amfi"`
 	// Closing balance units for the statement period
-	CloseUnits float64 `json:"close_units,nullable"`
+	CloseUnits float64 `json:"close_units" api:"nullable"`
 	// Opening balance units for the statement period
-	OpenUnits float64 `json:"open_units,nullable"`
+	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// RTA code for the scheme (CAMS/KFintech)
 	RtaCode string `json:"rta_code"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -942,7 +944,7 @@ type UnifiedResponseNpFundAdditionalInfo struct {
 	// NPS tier (Tier I or Tier II)
 	//
 	// Any of 1, 2.
-	Tier float64 `json:"tier,nullable"`
+	Tier float64 `json:"tier" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Manager     respjson.Field

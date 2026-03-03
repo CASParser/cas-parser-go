@@ -14,6 +14,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for generating new CAS documents via email mailback (KFintech).
+//
 // KfintechService contains methods and other services that help with interacting
 // with the cas-parser API.
 //
@@ -65,13 +67,13 @@ func (r *KfintechGenerateCasResponse) UnmarshalJSON(data []byte) error {
 
 type KfintechGenerateCasParams struct {
 	// Email address to receive the CAS document
-	Email string `json:"email,required"`
+	Email string `json:"email" api:"required"`
 	// Start date (YYYY-MM-DD)
-	FromDate string `json:"from_date,required"`
+	FromDate string `json:"from_date" api:"required"`
 	// Password for the PDF
-	Password string `json:"password,required"`
+	Password string `json:"password" api:"required"`
 	// End date (YYYY-MM-DD)
-	ToDate string `json:"to_date,required"`
+	ToDate string `json:"to_date" api:"required"`
 	// PAN number (optional)
 	PanNo param.Opt[string] `json:"pan_no,omitzero"`
 	paramObj

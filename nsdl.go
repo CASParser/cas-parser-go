@@ -13,6 +13,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/param"
 )
 
+// Endpoints for parsing CAS PDF files from different sources.
+//
 // NsdlService contains methods and other services that help with interacting with
 // the cas-parser API.
 //

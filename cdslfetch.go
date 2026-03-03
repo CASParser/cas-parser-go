@@ -17,6 +17,9 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for fetching CAS documents with instant download. Currently supports
+// CDSL via OTP authentication.
+//
 // CdslFetchService contains methods and other services that help with interacting
 // with the cas-parser API.
 //
@@ -129,11 +132,11 @@ func (r *CdslFetchVerifyOtpResponseFile) UnmarshalJSON(data []byte) error {
 
 type CdslFetchRequestOtpParams struct {
 	// CDSL BO ID (16 digits)
-	BoID string `json:"bo_id,required"`
+	BoID string `json:"bo_id" api:"required"`
 	// Date of birth (YYYY-MM-DD)
-	Dob string `json:"dob,required"`
+	Dob string `json:"dob" api:"required"`
 	// PAN number
-	Pan string `json:"pan,required"`
+	Pan string `json:"pan" api:"required"`
 	paramObj
 }
 
@@ -147,7 +150,7 @@ func (r *CdslFetchRequestOtpParams) UnmarshalJSON(data []byte) error {
 
 type CdslFetchVerifyOtpParams struct {
 	// OTP received on mobile
-	Otp string `json:"otp,required"`
+	Otp string `json:"otp" api:"required"`
 	// Number of monthly statements to fetch (default 6)
 	NumPeriods param.Opt[int64] `json:"num_periods,omitzero"`
 	paramObj
