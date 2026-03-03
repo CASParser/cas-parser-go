@@ -15,6 +15,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for parsing CAS PDF files from different sources.
+//
 // CamsKfintechService contains methods and other services that help with
 // interacting with the cas-parser API.
 //

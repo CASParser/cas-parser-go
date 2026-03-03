@@ -13,6 +13,11 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for managing access tokens for the Portfolio Connect SDK. Use these to
+// generate short-lived `at_` prefixed tokens that can be safely passed to frontend
+// applications. Access tokens can be used in place of API keys on all v4
+// endpoints.
+//
 // VerifyTokenService contains methods and other services that help with
 // interacting with the cas-parser API.
 //
