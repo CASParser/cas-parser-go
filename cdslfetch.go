@@ -17,6 +17,9 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for fetching CAS documents with instant download. Currently supports
+// CDSL via OTP authentication.
+//
 // CdslFetchService contains methods and other services that help with interacting
 // with the cas-parser API.
 //

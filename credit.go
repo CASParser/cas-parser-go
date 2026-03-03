@@ -14,6 +14,9 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for checking API quota and credits usage. These endpoints help you
+// monitor your API usage and remaining quota.
+//
 // CreditService contains methods and other services that help with interacting
 // with the cas-parser API.
 //

@@ -15,6 +15,9 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for parsing Contract Note PDF files from various SEBI brokers like
+// Zerodha, Groww, Upstox, ICICI etc.
+//
 // ContractNoteService contains methods and other services that help with
 // interacting with the cas-parser API.
 //

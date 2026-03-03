@@ -13,6 +13,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/param"
 )
 
+// Endpoints for parsing CAS PDF files from different sources.
+//
 // CdslService contains methods and other services that help with interacting with
 // the cas-parser API.
 //
@@ -21,7 +23,9 @@ import (
 // the [NewCdslService] method instead.
 type CdslService struct {
 	Options []option.RequestOption
-	Fetch   CdslFetchService
+	// Endpoints for fetching CAS documents with instant download. Currently supports
+	// CDSL via OTP authentication.
+	Fetch CdslFetchService
 }
 
 // NewCdslService generates a new service that applies the given options to each

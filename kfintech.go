@@ -14,6 +14,8 @@ import (
 	"github.com/CASParser/cas-parser-go/packages/respjson"
 )
 
+// Endpoints for generating new CAS documents via email mailback (KFintech).
+//
 // KfintechService contains methods and other services that help with interacting
 // with the cas-parser API.
 //
