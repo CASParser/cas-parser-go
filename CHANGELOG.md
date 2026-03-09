@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.2 (2026-03-07)
+
+Full Changelog: [v0.5.1...v0.5.2](https://github.com/CASParser/cas-parser-go/compare/v0.5.1...v0.5.2)
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([2087492](https://github.com/CASParser/cas-parser-go/commit/20874926fcaea5a7dfac7cd4bde7cbfa3d58f547))
+* **internal:** codegen related update ([1a6c299](https://github.com/CASParser/cas-parser-go/commit/1a6c2997eeb31bda0fe28435dc58d99e3b1914d9))
+
 ## 0.5.1 (2026-03-03)
 
 Full Changelog: [v0.5.0...v0.5.1](https://github.com/CASParser/cas-parser-go/compare/v0.5.0...v0.5.1)
