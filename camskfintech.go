@@ -43,7 +43,7 @@ func (r *CamsKfintechService) Parse(ctx context.Context, body CamsKfintechParseP
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/cams_kfintech/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type LinkedHolder struct {

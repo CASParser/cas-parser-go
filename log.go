@@ -47,7 +47,7 @@ func (r *LogService) New(ctx context.Context, body LogNewParams, opts ...option.
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/usage"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get aggregated usage statistics grouped by feature.
@@ -60,7 +60,7 @@ func (r *LogService) GetSummary(ctx context.Context, body LogGetSummaryParams, o
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/usage/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type LogNewResponse struct {

@@ -65,7 +65,7 @@ func (r *InboxService) CheckConnectionStatus(ctx context.Context, body InboxChec
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/status"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Initiate OAuth flow to connect user's email inbox.
@@ -91,7 +91,7 @@ func (r *InboxService) ConnectEmail(ctx context.Context, body InboxConnectEmailP
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/connect"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Revoke email access and invalidate the token.
@@ -107,7 +107,7 @@ func (r *InboxService) DisconnectEmail(ctx context.Context, body InboxDisconnect
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/disconnect"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Search the user's email inbox for CAS files from known senders (CAMS, KFintech,
@@ -126,7 +126,7 @@ func (r *InboxService) ListCasFiles(ctx context.Context, params InboxListCasFile
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/cas"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type InboxCheckConnectionStatusResponse struct {

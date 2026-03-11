@@ -42,7 +42,7 @@ func (r *SmartService) ParseCasPdf(ctx context.Context, body SmartParseCasPdfPar
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/smart/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type SmartParseCasPdfParams struct {

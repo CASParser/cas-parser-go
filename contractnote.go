@@ -70,7 +70,7 @@ func (r *ContractNoteService) Parse(ctx context.Context, body ContractNoteParseP
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/contract_note/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type ContractNoteParseResponse struct {
