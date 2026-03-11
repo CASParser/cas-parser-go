@@ -52,7 +52,7 @@ func (r *CdslFetchService) RequestOtp(ctx context.Context, body CdslFetchRequest
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/cdsl/fetch"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // **Step 2 of 2**: Verify OTP and retrieve CDSL CAS files.
@@ -63,11 +63,11 @@ func (r *CdslFetchService) VerifyOtp(ctx context.Context, sessionID string, body
 	opts = slices.Concat(r.Options, opts)
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v4/cdsl/fetch/%s/verify", url.PathEscape(sessionID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type CdslFetchRequestOtpResponse struct {

@@ -41,7 +41,7 @@ func (r *NsdlService) Parse(ctx context.Context, body NsdlParseParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/nsdl/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type NsdlParseParams struct {
