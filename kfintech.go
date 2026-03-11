@@ -44,7 +44,7 @@ func (r *KfintechService) GenerateCas(ctx context.Context, body KfintechGenerate
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/kfintech/generate"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type KfintechGenerateCasResponse struct {

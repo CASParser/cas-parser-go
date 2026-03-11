@@ -38,7 +38,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Credits.Check(context.Background())
+	_, _ = client.Credits.Check(context.Background())
 	if userAgent != fmt.Sprintf("CasParser/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}

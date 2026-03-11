@@ -43,7 +43,7 @@ func (r *VerifyTokenService) Verify(ctx context.Context, opts ...option.RequestO
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/token/verify"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type VerifyTokenVerifyResponse struct {
