@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.3 (2026-03-11)
+
+Full Changelog: [v0.5.2...v0.5.3](https://github.com/CASParser/cas-parser-go/compare/v0.5.2...v0.5.3)
+
+### Chores
+
+* **internal:** minor cleanup ([5dcbbb1](https://github.com/CASParser/cas-parser-go/commit/5dcbbb199f0fc37d6676c9d259205773c794406f))
+* **internal:** use explicit returns ([edbbf41](https://github.com/CASParser/cas-parser-go/commit/edbbf41442d2577fb04903e619b9b67554d10209))
+* **internal:** use explicit returns in more places ([af11842](https://github.com/CASParser/cas-parser-go/commit/af11842d738d5907bde4ba49fcd17679a037dc3e))
+
 ## 0.5.2 (2026-03-07)
 
 Full Changelog: [v0.5.1...v0.5.2](https://github.com/CASParser/cas-parser-go/compare/v0.5.1...v0.5.2)
