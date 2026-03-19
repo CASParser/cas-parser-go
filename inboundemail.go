@@ -91,7 +91,7 @@ func (r *InboundEmailService) New(ctx context.Context, body InboundEmailNewParam
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbound-email"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieve details of a specific mailbox including statistics.
@@ -99,11 +99,11 @@ func (r *InboundEmailService) Get(ctx context.Context, inboundEmailID string, op
 	opts = slices.Concat(r.Options, opts)
 	if inboundEmailID == "" {
 		err = errors.New("missing required inbound_email_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v4/inbound-email/%s", url.PathEscape(inboundEmailID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List all mailboxes associated with your API key. Returns active and inactive
@@ -112,7 +112,7 @@ func (r *InboundEmailService) List(ctx context.Context, query InboundEmailListPa
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbound-email"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Permanently delete an inbound email address. It will stop accepting emails.
@@ -123,11 +123,11 @@ func (r *InboundEmailService) Delete(ctx context.Context, inboundEmailID string,
 	opts = slices.Concat(r.Options, opts)
 	if inboundEmailID == "" {
 		err = errors.New("missing required inbound_email_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v4/inbound-email/%s", url.PathEscape(inboundEmailID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // An inbound email address for receiving forwarded CAS emails

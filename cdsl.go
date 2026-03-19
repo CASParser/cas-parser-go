@@ -45,7 +45,7 @@ func (r *CdslService) ParsePdf(ctx context.Context, body CdslParsePdfParams, opt
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/cdsl/parse"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type CdslParsePdfParams struct {

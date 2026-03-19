@@ -55,7 +55,7 @@ func (r *AccessTokenService) New(ctx context.Context, body AccessTokenNewParams,
 	opts = slices.Concat(r.Options, opts)
 	path := "v1/token"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 type AccessTokenNewResponse struct {
