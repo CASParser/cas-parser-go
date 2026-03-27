@@ -37,7 +37,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/CASParser/cas-parser-go@v0.5.3'
+go get -u 'github.com/CASParser/cas-parser-go@v0.6.0'
 ```
 
 <!-- x-release-please-end -->
