@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.6.0 (2026-03-27)
+
+Full Changelog: [v0.5.3...v0.6.0](https://github.com/CASParser/cas-parser-go/compare/v0.5.3...v0.6.0)
+
+### Features
+
+* **internal:** support comma format in multipart form encoding ([6c39815](https://github.com/CASParser/cas-parser-go/commit/6c3981526f178833589ac8991f3e39ac3bffb2cf))
+
+
+### Bug Fixes
+
+* prevent duplicate ? in query params ([f7cfb89](https://github.com/CASParser/cas-parser-go/commit/f7cfb89b74abdde929b9bf09e7f461f0a59701cb))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([cb79b17](https://github.com/CASParser/cas-parser-go/commit/cb79b17587f210a297a451bde4d02934c0e7de67))
+* **client:** fix multipart serialisation of Default() fields ([17d404d](https://github.com/CASParser/cas-parser-go/commit/17d404d8858084b9b71419138e72de0dc7e6f65b))
+* **internal:** support default value struct tag ([6da3050](https://github.com/CASParser/cas-parser-go/commit/6da30504423b6f369d2a1a3e9ddb24263856db9c))
+* **internal:** update gitignore ([22ed58c](https://github.com/CASParser/cas-parser-go/commit/22ed58cca58650432ef3cfaefbe3cb80d85d60ee))
+* remove unnecessary error check for url parsing ([7cb383a](https://github.com/CASParser/cas-parser-go/commit/7cb383af66275655755216a51b0d0af6fcd3b09e))
+
 ## 0.5.3 (2026-03-17)
 
 Full Changelog: [v0.5.2...v0.5.3](https://github.com/CASParser/cas-parser-go/compare/v0.5.2...v0.5.3)
