@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.1 (2026-03-31)
+
+Full Changelog: [v0.6.0...v0.6.1](https://github.com/CASParser/cas-parser-go/compare/v0.6.0...v0.6.1)
+
+### Chores
+
+* **ci:** support opting out of skipping builds on metadata-only commits ([35efa48](https://github.com/CASParser/cas-parser-go/commit/35efa48691feeb6e6ed97d2349e7c7cb1f11caf2))
+* update docs for api:"required" ([14c880c](https://github.com/CASParser/cas-parser-go/commit/14c880c0fd219543f84f2b6d2d303e2fac946274))
+
 ## 0.6.0 (2026-03-27)
 
 Full Changelog: [v0.5.3...v0.6.0](https://github.com/CASParser/cas-parser-go/compare/v0.5.3...v0.6.0)
