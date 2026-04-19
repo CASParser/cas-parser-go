@@ -27,9 +27,9 @@ func TestInboundEmailNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.InboundEmail.New(context.TODO(), casparser.InboundEmailNewParams{
-		CallbackURL:    "https://api.yourapp.com/webhooks/cas-email",
 		Alias:          casparser.String("john-portfolio"),
 		AllowedSources: []string{"cdsl", "nsdl"},
+		CallbackURL:    casparser.String("https://api.yourapp.com/webhooks/cas-email"),
 		Metadata: map[string]string{
 			"plan":   "premium",
 			"source": "onboarding",

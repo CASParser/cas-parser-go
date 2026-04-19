@@ -67,26 +67,14 @@ func NewInboundEmailService(opts ...option.RequestOption) (r InboundEmailService
 }
 
 // Create a dedicated inbound email address for collecting CAS statements via email
-// forwarding.
+// forwarding. When an investor forwards a CAS email to this address, we verify the
+// sender and make the file available to you.
 //
-// **How it works:**
+// `callback_url` is **optional**:
 //
-//  1. Create an inbound email with your webhook URL
-//  2. Display the email address to your user (e.g., "Forward your CAS to
-//     ie_xxx@import.casparser.in")
-//  3. When an investor forwards a CAS email, we verify the sender and deliver to
-//     your webhook
-//
-// **Webhook Delivery:**
-//
-//   - We POST to your `callback_url` with JSON body containing files (matching
-//     EmailCASFile schema)
-//   - Failed deliveries are retried automatically with exponential backoff
-//
-// **Inactivity:**
-//
-// - Inbound emails with no activity in 30 days are marked inactive
-// - Active inbound emails remain operational indefinitely
+//   - **Set it** — we POST each parsed email to your webhook as it arrives.
+//   - **Omit it** — retrieve files via `GET /v4/inbound-email/{id}/files` without
+//     building a webhook consumer.
 func (r *InboundEmailService) New(ctx context.Context, body InboundEmailNewParams, opts ...option.RequestOption) (res *InboundEmailNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbound-email"
@@ -136,8 +124,9 @@ type InboundEmailNewResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications
-	CallbackURL string `json:"callback_url" format:"uri"`
+	// Webhook URL for email notifications. `null` means files are only retrievable via
+	// `GET /v4/inbound-email/{id}/files` (pull delivery).
+	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
 	// When the mailbox was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
@@ -190,8 +179,9 @@ type InboundEmailGetResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications
-	CallbackURL string `json:"callback_url" format:"uri"`
+	// Webhook URL for email notifications. `null` means files are only retrievable via
+	// `GET /v4/inbound-email/{id}/files` (pull delivery).
+	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
 	// When the mailbox was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
@@ -269,8 +259,9 @@ type InboundEmailListResponseInboundEmail struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications
-	CallbackURL string `json:"callback_url" format:"uri"`
+	// Webhook URL for email notifications. `null` means files are only retrievable via
+	// `GET /v4/inbound-email/{id}/files` (pull delivery).
+	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
 	// When the mailbox was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
@@ -328,16 +319,13 @@ func (r *InboundEmailDeleteResponse) UnmarshalJSON(data []byte) error {
 }
 
 type InboundEmailNewParams struct {
-	// Webhook URL where we POST email notifications. Must be HTTPS in production (HTTP
-	// allowed for localhost during development).
-	CallbackURL string `json:"callback_url" api:"required" format:"uri"`
-	// Optional custom email prefix for user-friendly addresses.
-	//
-	// - Must be 3-32 characters
-	// - Alphanumeric + hyphens only
-	// - Must start and end with letter/number
-	// - Example: `john-portfolio@import.casparser.in`
-	// - If omitted, generates random ID like `ie_abc123xyz@import.casparser.in`
+	// Optional webhook URL where we POST parsed emails. Must be HTTPS in production
+	// (HTTP allowed for localhost). If omitted, retrieve files via
+	// `GET /v4/inbound-email/{id}/files`.
+	CallbackURL param.Opt[string] `json:"callback_url,omitzero" format:"uri"`
+	// Optional custom email prefix (e.g. `john-portfolio@import.casparser.in`). 3-32
+	// chars, alphanumeric + hyphens, must start/end with a letter or number. If
+	// omitted, a random ID is generated.
 	Alias param.Opt[string] `json:"alias,omitzero"`
 	// Your internal identifier (e.g., user_id, account_id). Returned in webhook
 	// payload for correlation.
