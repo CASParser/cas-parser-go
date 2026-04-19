@@ -58,7 +58,7 @@ func TestInboundEmailGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.InboundEmail.Get(context.TODO(), "ie_a1b2c3d4e5f6")
+	_, err := client.InboundEmail.Get(context.TODO(), "inbound_email_id")
 	if err != nil {
 		var apierr *casparser.Error
 		if errors.As(err, &apierr) {
