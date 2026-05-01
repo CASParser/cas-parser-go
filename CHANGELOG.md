@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.8.0 (2026-05-01)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/CASParser/cas-parser-go/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **go:** add default http client with timeout ([beb6a1f](https://github.com/CASParser/cas-parser-go/commit/beb6a1f6e2ec642dac7e6d5050a781cb081871a8))
+* support setting headers via env ([c5ffd5f](https://github.com/CASParser/cas-parser-go/commit/c5ffd5f6015f40bdfe27a34f630c59f7c2c187f4))
+
+
+### Chores
+
+* avoid embedding reflect.Type for dead code elimination ([0b78868](https://github.com/CASParser/cas-parser-go/commit/0b78868a151d1a5a401906190cf202a4854310b0))
+* **internal:** more robust bootstrap script ([58cdef6](https://github.com/CASParser/cas-parser-go/commit/58cdef67485d0890acb2b0263053a79260a3fe23))
+
 ## 0.7.0 (2026-04-19)
 
 Full Changelog: [v0.6.1...v0.7.0](https://github.com/CASParser/cas-parser-go/compare/v0.6.1...v0.7.0)
