@@ -82,7 +82,7 @@ func (r *InboundEmailService) New(ctx context.Context, body InboundEmailNewParam
 	return res, err
 }
 
-// Retrieve details of a specific mailbox including statistics.
+// Retrieve details of a specific inbound email including statistics.
 func (r *InboundEmailService) Get(ctx context.Context, inboundEmailID string, opts ...option.RequestOption) (res *InboundEmailGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if inboundEmailID == "" {
@@ -94,8 +94,8 @@ func (r *InboundEmailService) Get(ctx context.Context, inboundEmailID string, op
 	return res, err
 }
 
-// List all mailboxes associated with your API key. Returns active and inactive
-// mailboxes (deleted mailboxes are excluded).
+// List all inbound emails associated with your API key. Returns active and paused
+// inbound emails (deleted ones are excluded).
 func (r *InboundEmailService) List(ctx context.Context, query InboundEmailListParams, opts ...option.RequestOption) (res *InboundEmailListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbound-email"
@@ -124,10 +124,10 @@ type InboundEmailNewResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. `null` means files are only retrievable via
-	// `GET /v4/inbound-email/{id}/files` (pull delivery).
-	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
-	// When the mailbox was created
+	// Webhook URL for email notifications. Empty string (`""`) means files are only
+	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	CallbackURL string `json:"callback_url" format:"uri"`
+	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
 	Email string `json:"email" format:"email"`
@@ -137,11 +137,11 @@ type InboundEmailNewResponse struct {
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
 	Reference string `json:"reference" api:"nullable"`
-	// Current mailbox status
+	// Current inbound email lifecycle status
 	//
 	// Any of "active", "paused".
 	Status InboundEmailNewResponseStatus `json:"status"`
-	// When the mailbox was last updated
+	// When the inbound email was last updated
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -165,7 +165,7 @@ func (r *InboundEmailNewResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Current mailbox status
+// Current inbound email lifecycle status
 type InboundEmailNewResponseStatus string
 
 const (
@@ -179,10 +179,10 @@ type InboundEmailGetResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. `null` means files are only retrievable via
-	// `GET /v4/inbound-email/{id}/files` (pull delivery).
-	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
-	// When the mailbox was created
+	// Webhook URL for email notifications. Empty string (`""`) means files are only
+	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	CallbackURL string `json:"callback_url" format:"uri"`
+	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
 	Email string `json:"email" format:"email"`
@@ -192,11 +192,11 @@ type InboundEmailGetResponse struct {
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
 	Reference string `json:"reference" api:"nullable"`
-	// Current mailbox status
+	// Current inbound email lifecycle status
 	//
 	// Any of "active", "paused".
 	Status InboundEmailGetResponseStatus `json:"status"`
-	// When the mailbox was last updated
+	// When the inbound email was last updated
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -220,7 +220,7 @@ func (r *InboundEmailGetResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Current mailbox status
+// Current inbound email lifecycle status
 type InboundEmailGetResponseStatus string
 
 const (
@@ -259,10 +259,10 @@ type InboundEmailListResponseInboundEmail struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. `null` means files are only retrievable via
-	// `GET /v4/inbound-email/{id}/files` (pull delivery).
-	CallbackURL string `json:"callback_url" api:"nullable" format:"uri"`
-	// When the mailbox was created
+	// Webhook URL for email notifications. Empty string (`""`) means files are only
+	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	CallbackURL string `json:"callback_url" format:"uri"`
+	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The inbound email address to forward CAS statements to
 	Email string `json:"email" format:"email"`
@@ -272,11 +272,11 @@ type InboundEmailListResponseInboundEmail struct {
 	Metadata map[string]string `json:"metadata"`
 	// Your internal reference identifier
 	Reference string `json:"reference" api:"nullable"`
-	// Current mailbox status
+	// Current inbound email lifecycle status
 	//
 	// Any of "active", "paused".
 	Status string `json:"status"`
-	// When the mailbox was last updated
+	// When the inbound email was last updated
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
