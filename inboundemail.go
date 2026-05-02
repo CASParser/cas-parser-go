@@ -124,8 +124,8 @@ type InboundEmailNewResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. Empty string (`""`) means files are only
-	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	// Webhook URL for email notifications. If set, we POST each parsed email here. If
+	// omitted, files are only retrievable via `GET /v4/inbound-email/{id}/files`.
 	CallbackURL string `json:"callback_url" format:"uri"`
 	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -179,8 +179,8 @@ type InboundEmailGetResponse struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. Empty string (`""`) means files are only
-	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	// Webhook URL for email notifications. If set, we POST each parsed email here. If
+	// omitted, files are only retrievable via `GET /v4/inbound-email/{id}/files`.
 	CallbackURL string `json:"callback_url" format:"uri"`
 	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -259,8 +259,8 @@ type InboundEmailListResponseInboundEmail struct {
 	//
 	// Any of "cdsl", "nsdl", "cams", "kfintech".
 	AllowedSources []string `json:"allowed_sources"`
-	// Webhook URL for email notifications. Empty string (`""`) means files are only
-	// retrievable via `GET /v4/inbound-email/{id}/files` (SDK / pull mode).
+	// Webhook URL for email notifications. If set, we POST each parsed email here. If
+	// omitted, files are only retrievable via `GET /v4/inbound-email/{id}/files`.
 	CallbackURL string `json:"callback_url" format:"uri"`
 	// When the inbound email was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
