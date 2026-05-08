@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.0 (2026-05-08)
+
+Full Changelog: [v0.8.0...v0.9.0](https://github.com/CASParser/cas-parser-go/compare/v0.8.0...v0.9.0)
+
+### Features
+
+* **api:** api update ([1383709](https://github.com/CASParser/cas-parser-go/commit/1383709c5b1b49ffd5fcb142c8abd73f2f6728be))
+* **api:** api update ([6e974d9](https://github.com/CASParser/cas-parser-go/commit/6e974d99b79519daa77c5266f54077b5d41cc580))
+
+
+### Bug Fixes
+
+* **go:** avoid panic when http.DefaultTransport is wrapped ([a0df656](https://github.com/CASParser/cas-parser-go/commit/a0df65678c6806e6c95ad992087c857275c0cdac))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([8cf162d](https://github.com/CASParser/cas-parser-go/commit/8cf162dc65df24e5f4ab99b8423d42c72c5ac70d))
+
 ## 0.8.0 (2026-05-01)
 
 Full Changelog: [v0.7.0...v0.8.0](https://github.com/CASParser/cas-parser-go/compare/v0.7.0...v0.8.0)
