@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0 (2026-05-18)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/CASParser/cas-parser-go/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **client:** optimize json encoder for internal types ([c4d3d55](https://github.com/CASParser/cas-parser-go/commit/c4d3d55d4d7111a3dd9eb5775be3d65f838a809c))
+
 ## 0.9.0 (2026-05-08)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/CASParser/cas-parser-go/compare/v0.8.0...v0.9.0)
