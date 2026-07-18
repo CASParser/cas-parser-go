@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.0 (2026-07-18)
+
+Full Changelog: [v0.10.0...v0.11.0](https://github.com/CASParser/cas-parser-go/compare/v0.10.0...v0.11.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([dbb668a](https://github.com/CASParser/cas-parser-go/commit/dbb668adc3c820e3e1c0cf95fbb07a42860f7020))
+
 ## 0.10.0 (2026-05-18)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/CASParser/cas-parser-go/compare/v0.9.0...v0.10.0)
