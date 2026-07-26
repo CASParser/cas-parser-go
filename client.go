@@ -59,8 +59,7 @@ type Client struct {
 	// - Read-only access (we cannot send emails)
 	// - Tokens are encrypted with server-side secret
 	// - User can revoke access anytime via `/v4/inbox/disconnect`
-	Inbox InboxService
-	// Endpoints for generating new CAS documents via email mailback (KFintech).
+	Inbox    InboxService
 	Kfintech KfintechService
 	// Endpoints for parsing CAS PDF files from different sources.
 	Nsdl NsdlService
