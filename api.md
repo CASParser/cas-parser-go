@@ -98,14 +98,6 @@ Methods:
 
 # Kfintech
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#KfintechGenerateCasResponse">KfintechGenerateCasResponse</a>
-
-Methods:
-
-- <code title="post /v4/kfintech/generate">client.Kfintech.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#KfintechService.GenerateCas">GenerateCas</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#KfintechGenerateCasParams">KfintechGenerateCasParams</a>) (\*<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go">casparser</a>.<a href="https://pkg.go.dev/github.com/CASParser/cas-parser-go#KfintechGenerateCasResponse">KfintechGenerateCasResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # Nsdl
 
 Methods:
