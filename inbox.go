@@ -158,11 +158,16 @@ type InboxConnectEmailResponse struct {
 	ExpiresIn int64 `json:"expires_in"`
 	// Redirect user to this URL to start OAuth flow
 	OAuthURL string `json:"oauth_url" format:"uri"`
-	Status   string `json:"status"`
+	// The provider this OAuth URL was generated for
+	//
+	// Any of "gmail", "outlook".
+	Provider InboxConnectEmailResponseProvider `json:"provider"`
+	Status   string                            `json:"status"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ExpiresIn   respjson.Field
 		OAuthURL    respjson.Field
+		Provider    respjson.Field
 		Status      respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -174,6 +179,14 @@ func (r InboxConnectEmailResponse) RawJSON() string { return r.JSON.raw }
 func (r *InboxConnectEmailResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The provider this OAuth URL was generated for
+type InboxConnectEmailResponseProvider string
+
+const (
+	InboxConnectEmailResponseProviderGmail   InboxConnectEmailResponseProvider = "gmail"
+	InboxConnectEmailResponseProviderOutlook InboxConnectEmailResponseProvider = "outlook"
+)
 
 type InboxDisconnectEmailResponse struct {
 	Msg    string `json:"msg"`
@@ -273,6 +286,16 @@ type InboxConnectEmailParams struct {
 	RedirectUri string `json:"redirect_uri" api:"required" format:"uri"`
 	// State parameter for CSRF protection (returned in redirect)
 	State param.Opt[string] `json:"state,omitzero"`
+	// Mail provider to connect. Defaults to `gmail`.
+	//
+	// - `gmail` - Google accounts
+	// - `outlook` - Microsoft accounts
+	//
+	// Any value other than `outlook` is treated as `gmail`. The resolved provider is
+	// returned in the response.
+	//
+	// Any of "gmail", "outlook".
+	Provider InboxConnectEmailParamsProvider `json:"provider,omitzero"`
 	paramObj
 }
 
@@ -283,6 +306,20 @@ func (r InboxConnectEmailParams) MarshalJSON() (data []byte, err error) {
 func (r *InboxConnectEmailParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Mail provider to connect. Defaults to `gmail`.
+//
+// - `gmail` - Google accounts
+// - `outlook` - Microsoft accounts
+//
+// Any value other than `outlook` is treated as `gmail`. The resolved provider is
+// returned in the response.
+type InboxConnectEmailParamsProvider string
+
+const (
+	InboxConnectEmailParamsProviderGmail   InboxConnectEmailParamsProvider = "gmail"
+	InboxConnectEmailParamsProviderOutlook InboxConnectEmailParamsProvider = "outlook"
+)
 
 type InboxDisconnectEmailParams struct {
 	XInboxToken string `header:"x-inbox-token" api:"required" json:"-"`
