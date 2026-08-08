@@ -54,6 +54,7 @@ func TestInboxConnectEmailWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Inbox.ConnectEmail(context.TODO(), casparser.InboxConnectEmailParams{
 		RedirectUri: "https://yourapp.com/oauth-callback",
+		Provider:    casparser.InboxConnectEmailParamsProviderOutlook,
 		State:       casparser.String("abc123"),
 	})
 	if err != nil {
