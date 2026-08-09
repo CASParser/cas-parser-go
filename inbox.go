@@ -18,7 +18,14 @@ import (
 
 // Endpoints for importing CAS files directly from user email inboxes.
 //
-// **Supported Providers:** Gmail (more coming soon)
+// **Supported Providers:**
+//
+//   - **Gmail** (`gmail`, default) — `@gmail.com` and Google Workspace domains
+//   - **Microsoft** (`outlook`) — personal Microsoft accounts: `@outlook.com`,
+//     `@hotmail.com`, `@live.com`, `@msn.com`, and localised variants such as
+//     `@hotmail.co.uk`, `@live.in`, `@hotmail.fr`. Any other address registered as a
+//     personal Microsoft account also works, including custom domains.
+//   - **Zoho Mail** (`zoho`) — Zoho-hosted mailboxes, including custom domains
 //
 // **How it works:**
 //
@@ -86,7 +93,10 @@ func (r *InboxService) CheckConnectionStatus(ctx context.Context, body InboxChec
 // - `state` - Your original state parameter
 //
 // **Store the `inbox_token` client-side** and use it for all subsequent inbox API
-// calls.
+// calls. The token is long-lived (it stores an encrypted refresh token), so a
+// single OAuth connect gives ongoing access to both historical and future CAS
+// statements in the user's inbox. Reuse the same token until the user revokes
+// access via `/v4/inbox/disconnect` or their provider's account settings.
 func (r *InboxService) ConnectEmail(ctx context.Context, body InboxConnectEmailParams, opts ...option.RequestOption) (res *InboxConnectEmailResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v4/inbox/connect"
@@ -160,7 +170,7 @@ type InboxConnectEmailResponse struct {
 	OAuthURL string `json:"oauth_url" format:"uri"`
 	// The provider this OAuth URL was generated for
 	//
-	// Any of "gmail", "outlook".
+	// Any of "gmail", "outlook", "zoho".
 	Provider InboxConnectEmailResponseProvider `json:"provider"`
 	Status   string                            `json:"status"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -186,6 +196,7 @@ type InboxConnectEmailResponseProvider string
 const (
 	InboxConnectEmailResponseProviderGmail   InboxConnectEmailResponseProvider = "gmail"
 	InboxConnectEmailResponseProviderOutlook InboxConnectEmailResponseProvider = "outlook"
+	InboxConnectEmailResponseProviderZoho    InboxConnectEmailResponseProvider = "zoho"
 )
 
 type InboxDisconnectEmailResponse struct {
@@ -235,7 +246,7 @@ type InboxListCasFilesResponseFile struct {
 	CasType string `json:"cas_type"`
 	// URL expiration time in seconds. Defaults vary by source:
 	//
-	// - Gmail Inbox Import: 86400 (24h)
+	// - Email Inbox Import (Gmail, Outlook, Zoho): 86400 (24h)
 	// - Inbound Email with `callback_url` set: 172800 (48h)
 	// - Inbound Email without `callback_url`: aligned with the session TTL (~30 min)
 	ExpiresIn int64 `json:"expires_in"`
@@ -288,13 +299,17 @@ type InboxConnectEmailParams struct {
 	State param.Opt[string] `json:"state,omitzero"`
 	// Mail provider to connect. Defaults to `gmail`.
 	//
-	// - `gmail` - Google accounts
-	// - `outlook` - Microsoft accounts
+	//   - `gmail` - Google accounts: `@gmail.com` and Google Workspace domains.
+	//   - `outlook` - personal Microsoft accounts: `@outlook.com`, `@hotmail.com`,
+	//     `@live.com`, `@msn.com` and localised variants (`@hotmail.co.uk`, `@live.in`,
+	//     `@hotmail.fr`). Any other address registered as a personal Microsoft account
+	//     also works, including custom domains.
+	//   - `zoho` - Zoho Mail accounts, including custom domains hosted on Zoho.
 	//
-	// Any value other than `outlook` is treated as `gmail`. The resolved provider is
-	// returned in the response.
+	// Any unrecognised value is treated as `gmail`. The resolved provider is returned
+	// in the response.
 	//
-	// Any of "gmail", "outlook".
+	// Any of "gmail", "outlook", "zoho".
 	Provider InboxConnectEmailParamsProvider `json:"provider,omitzero"`
 	paramObj
 }
@@ -309,16 +324,21 @@ func (r *InboxConnectEmailParams) UnmarshalJSON(data []byte) error {
 
 // Mail provider to connect. Defaults to `gmail`.
 //
-// - `gmail` - Google accounts
-// - `outlook` - Microsoft accounts
+//   - `gmail` - Google accounts: `@gmail.com` and Google Workspace domains.
+//   - `outlook` - personal Microsoft accounts: `@outlook.com`, `@hotmail.com`,
+//     `@live.com`, `@msn.com` and localised variants (`@hotmail.co.uk`, `@live.in`,
+//     `@hotmail.fr`). Any other address registered as a personal Microsoft account
+//     also works, including custom domains.
+//   - `zoho` - Zoho Mail accounts, including custom domains hosted on Zoho.
 //
-// Any value other than `outlook` is treated as `gmail`. The resolved provider is
-// returned in the response.
+// Any unrecognised value is treated as `gmail`. The resolved provider is returned
+// in the response.
 type InboxConnectEmailParamsProvider string
 
 const (
 	InboxConnectEmailParamsProviderGmail   InboxConnectEmailParamsProvider = "gmail"
 	InboxConnectEmailParamsProviderOutlook InboxConnectEmailParamsProvider = "outlook"
+	InboxConnectEmailParamsProviderZoho    InboxConnectEmailParamsProvider = "zoho"
 )
 
 type InboxDisconnectEmailParams struct {
