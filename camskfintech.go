@@ -832,6 +832,9 @@ type UnifiedResponseMutualFundSchemeAdditionalInfo struct {
 	Amfi string `json:"amfi"`
 	// Closing balance units for the statement period
 	CloseUnits float64 `json:"close_units" api:"nullable"`
+	// Whether the scheme is held in demat form (CAMS/KFintech). true = Demat, false =
+	// Non-Demat, null = not specified.
+	IsDemat bool `json:"is_demat" api:"nullable"`
 	// Opening balance units for the statement period
 	OpenUnits float64 `json:"open_units" api:"nullable"`
 	// RTA code for the scheme (CAMS/KFintech)
@@ -841,6 +844,7 @@ type UnifiedResponseMutualFundSchemeAdditionalInfo struct {
 		Advisor     respjson.Field
 		Amfi        respjson.Field
 		CloseUnits  respjson.Field
+		IsDemat     respjson.Field
 		OpenUnits   respjson.Field
 		RtaCode     respjson.Field
 		ExtraFields map[string]respjson.Field

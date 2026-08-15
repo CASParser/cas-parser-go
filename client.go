@@ -43,7 +43,14 @@ type Client struct {
 	ContractNote ContractNoteService
 	// Endpoints for importing CAS files directly from user email inboxes.
 	//
-	// **Supported Providers:** Gmail (more coming soon)
+	// **Supported Providers:**
+	//
+	//   - **Gmail** (`gmail`, default) — `@gmail.com` and Google Workspace domains
+	//   - **Microsoft** (`outlook`) — personal Microsoft accounts: `@outlook.com`,
+	//     `@hotmail.com`, `@live.com`, `@msn.com`, and localised variants such as
+	//     `@hotmail.co.uk`, `@live.in`, `@hotmail.fr`. Any other address registered as a
+	//     personal Microsoft account also works, including custom domains.
+	//   - **Zoho Mail** (`zoho`) — Zoho-hosted mailboxes, including custom domains
 	//
 	// **How it works:**
 	//
